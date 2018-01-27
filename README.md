@@ -12,3 +12,4 @@ Ce projet consiste en un jeu multijoueurs en temps réel utilisant la technologi
 #### Sem 2
 * Création d'assets de base
 * Création d'un prototype de jeu Phaser pour tester la connection/déconnection joueurs
+* Scénario d'un jeu (première ébauche)
