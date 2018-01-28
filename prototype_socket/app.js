@@ -16,3 +16,9 @@ app.get('/', function(req,res){
 server.listen(8081,function(){ // Listens to port 8081
     console.log('Listening on '+server.address().port);
 });
+
+io.on('connection',function(socket){
+    socket.on('nouveauJoueur',function(){
+       console.log("Joueur connecté:"+socket.id);
+    });
+});

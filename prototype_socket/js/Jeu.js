@@ -16,13 +16,16 @@ DRAPEAU.Jeu.prototype = {
 
     },
     preload:function(){
-        this.game.load.image('sprite','medias/img/perso1.png');
+        this.game.load.image('perso','medias/img/perso1.png');
     },
+
     /**
      * Fonction servant à la création du jeu
      */
     create: function () {
+        this.game.add.image(0, 0, "perso");
         console.log("Jeu");
+        JOUEUR.nouveauJoueur();
     },
     /**
      * Fonction exécuté environ 60X / secondes
