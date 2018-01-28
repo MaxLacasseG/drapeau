@@ -3,7 +3,6 @@ body {
   background: #1fb3ee;
   margin: 0;
   padding: 0;
-  display: flex;
   flex-direction: column;
   justify-content: space-around;
   height: 100vh;

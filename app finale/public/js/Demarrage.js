@@ -20,6 +20,6 @@ DRAPEAU.Demarrage.prototype = {
 
     create: function() {
         console.log("DEMARRÉ");
-        // this.game.state.start("ChargementMedias");
+        this.game.state.start("ChargementMedias");
     }
 };
