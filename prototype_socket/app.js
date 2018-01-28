@@ -17,8 +17,15 @@ server.listen(8081,function(){ // Listens to port 8081
     console.log('Listening on '+server.address().port);
 });
 
+//Section de gestion des événements sockets
+//Eve. lancée lors d'une connexion au serveur
 io.on('connection',function(socket){
+    //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur',function(){
-       console.log("Joueur connecté:"+socket.id);
+
+       //Gestion de la deconnection 
+       socket.on('disconnect', function(){
+            console.log("déconnecté");
+       });
     });
 });
