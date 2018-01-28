@@ -10,14 +10,14 @@
 
    //Création du jeu, après le chargement de la page
    window.addEventListener("load", function () {
+       var parent = document.getElementById("jeuConteneur");
        var config = {
-           width: window.innerWidth,
-           height: window.innerHeight,
+           width : parent.clientWidth,
+           height : parent.clientHeight,
            renderer: Phaser.AUTO,
            antialias: true,
            multiTexture: true,
-           parent: "",
-           transparent:true
+           parent: parent.id
        };
        var leJeu = new Phaser.Game(config);
 

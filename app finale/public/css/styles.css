@@ -1,9 +1,17 @@
+@import 'reset.css';
 body {
   background: #1fb3ee;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+body header {
+  flex: 1 1 10%;
 }
 body #jeu {
+  flex: 1 0 auto;
+  border: 1px solid tomato;
   background: url(../medias/img/motifBG.png);
 }
 #orientation {
@@ -12,8 +20,9 @@ body #jeu {
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 9999;
   background-repeat: no-repeat;
   background-position: center center;
-  background-color: #d40644;
+  background-color: rgba(0, 0, 0, 0.404);
   display: none;
 }
