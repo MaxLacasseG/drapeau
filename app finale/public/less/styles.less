@@ -5,11 +5,21 @@ body {
     padding:0;
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
+    height: 100vh;
+    max-height: 100vh;
     & header{
-        flex:1 1 10%;
+        padding: 2em;
+        min-height: 15vh;
+        & h1{
+            color: white;
+            font-size: 1em;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
     }
     & #jeu{
-        flex: 1 0 auto; 
         border: 1px solid tomato;
         background: url(../medias/img/motifBG.png);
     }

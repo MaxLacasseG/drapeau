@@ -4,16 +4,13 @@
 
    DRAPEAU = {
        //Constantes et variables du jeu
-       NOM_LOCAL_STORAGE: "DRAPEAUJeu", //Sauvegarde et enregistrement du meilleur score
+       NOM_LOCAL_STORAGE: "DRAPEAUJeu" //Sauvegarde et enregistrement du meilleur score
 
    };
 
    //Création du jeu, après le chargement de la page
    window.addEventListener("load", function () {
-       var parent = document.getElementById("jeuConteneur");
        var config = {
-           width : parent.clientWidth,
-           height : parent.clientHeight,
            renderer: Phaser.AUTO,
            antialias: true,
            multiTexture: true,
@@ -21,6 +18,7 @@
        };
        var leJeu = new Phaser.Game(config);
 
+    
        //Ajout des états du jeu, et sélection de l'état au démarrage
        leJeu.state.add("Demarrage", DRAPEAU.Demarrage);
        //    leJeu.state.add("Instructions", DRAPEAU.Instructions);

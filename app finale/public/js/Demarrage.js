@@ -13,8 +13,8 @@ DRAPEAU.Demarrage.prototype = {
     init: function() {
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;
-        // this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        
+        //this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.stage.backgroundColor = "FFFFFF";
         this.input.maxPointers = 1;
     },
 
