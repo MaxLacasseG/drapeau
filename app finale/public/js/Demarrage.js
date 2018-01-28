@@ -1,13 +1,15 @@
 "use strict";
 
-var RECOLTES = RECOLTES || {};
+var DRAPEAU = DRAPEAU || {};
 ////////////////////////////////
 //         Démarrage          //
 ////////////////////////////////
 
-RECOLTES.Demarrage = function() {};
+//Script servant à initialiser les contrôles
 
-RECOLTES.Demarrage.prototype = {
+DRAPEAU.Demarrage = function() {};
+
+DRAPEAU.Demarrage.prototype = {
     init: function() {
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;
@@ -17,6 +19,7 @@ RECOLTES.Demarrage.prototype = {
     },
 
     create: function() {
-        this.game.state.start("ChargementMedias");
+        console.log("DEMARRÉ");
+        // this.game.state.start("ChargementMedias");
     }
 };
