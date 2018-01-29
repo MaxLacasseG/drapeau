@@ -24,8 +24,8 @@ DRAPEAU.Jeu.prototype = {
      * Fonction servant à la création du jeu
      */
     create: function () {
-        this.game.add.image(0, 0, "perso");
         console.log("Jeu");
+        this.game.add.image(0, 0, "perso");
         JOUEUR.nouveauJoueur();
         this.fleches = this.game.input.keyboard.createCursorKeys();
     },
