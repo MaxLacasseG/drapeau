@@ -22,7 +22,7 @@ DRAPEAU.Jeu.prototype = {
         //console.log(this);
         this.game.load.image('perso', 'medias/img/perso1.png');
     },
-    ajouterJoueur: function (id, x,y) {
+    ajouterJoueur: function (id, x, y) {
         this.perso =this.game.add.image(100, 100, "perso");
     },
     /**
