@@ -19,9 +19,18 @@ server.listen(8081,function(){ // Listens to port 8081
 
 //Section de gestion des événements sockets
 //Eve. lancée lors d'une connexion au serveur
+app.idDernierJoueur = 0;
 io.on('connection',function(socket){
     //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur',function(){
+        socket.joueur = {
+            id: app.idDernierJoueur++,
+            x:100,
+            y:100
+        },
+
+        socket.emit('recupererJoueurs', recupererJoueurs());
+        socket.broadcast.emit('nouveauJoueur', socket.joueur);
 
        //Gestion de la deconnection 
        socket.on('disconnect', function(){
@@ -29,3 +38,12 @@ io.on('connection',function(socket){
        });
     });
 });
+
+function recupererJoueurs(){
+    var tabJoueurs = [];
+    Object.keys(io.sockets.connected).forEach(function(socketID){
+        var joueur = io.sockets.connected[socketID].joueur;
+        if(joueur) tabJoueurs.push(joueur);
+    });
+    return tabJoueurs;
+}
