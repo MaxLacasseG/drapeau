@@ -9,6 +9,7 @@ DRAPEAU.Jeu = function () {
     //DÉCLARATIONS DES PROPRIÉTÉS
     //Le nombre de blocs du jeu
     var fleches;
+    var perso;
   
 };
 
@@ -25,7 +26,7 @@ DRAPEAU.Jeu.prototype = {
      */
     create: function () {
         console.log("Jeu");
-        this.game.add.image(0, 0, "perso");
+        this.perso = this.game.add.image(0, 0, "perso");
         JOUEUR.nouveauJoueur();
         this.fleches = this.game.input.keyboard.createCursorKeys();
     },
@@ -34,7 +35,13 @@ DRAPEAU.Jeu.prototype = {
      * Vérifie la direction du curseur lorsqu'un élément est cliqué et l'ajoute comme blocActif2
      */
     update: function () {
+        if(this.fleches.left.isDown){
+            this.perso.position.x -= 10;
+        }
+        if(this.fleches.right.isDown){
+
+            this.perso.position.x +=10;
+        }
         
     } // Fin update
-
 }; // Fin Jeu.prototype
