@@ -22,13 +22,13 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.image('perso', 'medias/img/perso1.png');
     },
     ajouterJoueur: function () {
-        console.log(this);
+       
     },
     /**
      * Fonction servant à la création du jeu
      */
     create: function () {
-        console.log(this);
+        
         //Démarrage du système de physique
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
