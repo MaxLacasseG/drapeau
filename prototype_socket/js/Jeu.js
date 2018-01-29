@@ -16,21 +16,26 @@ DRAPEAU.Jeu = function () {
 
 DRAPEAU.Jeu.prototype = {
     init: function () {
-        this.tabPerso = {};
+        this.tabPerso = [];
     },
     preload: function () {
         //console.log(this);
         this.game.load.image('perso', 'medias/img/perso1.png');
     },
     ajouterJoueur: function (id, x, y) {
-        this.perso =this.game.add.image(x, y, "perso");
-        this.tabPerso[id]= this.perso;
+        this.tabPerso[id] = this.game.add.image(x, y, "perso");
+        this.perso = this.tabPerso[id];
+    },
+    enleverJoueur: function (id) {
+        console.log(this.tabPerso);
+        this.tabPerso[id].destroy();
+        delete this.tabPerso[id];
     },
     /**
      * Fonction servant à la création du jeu
      */
     create: function () {
-        
+
         //Démarrage du système de physique
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 

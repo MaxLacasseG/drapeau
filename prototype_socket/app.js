@@ -23,18 +23,19 @@ app.idDernierJoueur = 0;
 io.on('connection',function(socket){
     //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur',function(){
+        console.log("nouveauJoueur");
         socket.joueur = {
             id: app.idDernierJoueur++,
             x:attribuerPosition(0, 200),
             y:attribuerPosition(0, 200)
         },
-
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
 
        //Gestion de la deconnection 
        socket.on('disconnect', function(){
-            console.log("déconnecté");
+           console.log("deconnection:"+socket.joueur.id);
+            io.emit('enleverJoueur', socket.joueur.id);
        });
     });
 });

@@ -19,3 +19,8 @@ JOUEUR.socket.on('recupererJoueurs', function(data){
         JOUEUR.jeu.state.states.Jeu.ajouterJoueur(data[i].id, data[i].x, data[i].y);
     }
 });
+
+JOUEUR.socket.on('enleverJoueur', function(data){
+    console.log(data);
+    JOUEUR.jeu.state.states.Jeu.enleverJoueur(data);
+});
