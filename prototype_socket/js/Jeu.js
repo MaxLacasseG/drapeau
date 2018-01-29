@@ -19,10 +19,11 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso = {};
     },
     preload: function () {
+        //console.log(this);
         this.game.load.image('perso', 'medias/img/perso1.png');
     },
-    ajouterJoueur: function () {
-       
+    ajouterJoueur: function (id, x,y) {
+        this.perso =this.game.add.image(100, 100, "perso");
     },
     /**
      * Fonction servant à la création du jeu
@@ -33,12 +34,12 @@ DRAPEAU.Jeu.prototype = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         //Ajout du personnage    
-        this.game.add.image(100, 100, "perso");
         //Message au serveur
         JOUEUR.nouveauJoueur();
 
         //Enregistrement des touches de jeu
         this.fleches = this.game.input.keyboard.createCursorKeys();
+        //this.ajouterJoueur();
     },
     /**
      * Fonction exécuté environ 60X / secondes

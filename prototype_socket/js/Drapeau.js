@@ -4,6 +4,7 @@ var DRAPEAU = DRAPEAU || {};
 
 DRAPEAU = {
     // Variables de jeu
+    instance:null
 };
 
 window.addEventListener("load", function(){
@@ -14,9 +15,10 @@ window.addEventListener("load", function(){
     };
 
     var jeu = new Phaser.Game(config);
-
     jeu.state.add("Demarrage", DRAPEAU.Demarrage);
     jeu.state.add("Jeu", DRAPEAU.Jeu);
 
     jeu.state.start("Demarrage");
+    this.instance = jeu;
+    JOUEUR.jeu = jeu;
 },false);
