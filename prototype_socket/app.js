@@ -25,8 +25,8 @@ io.on('connection',function(socket){
     socket.on('nouveauJoueur',function(){
         socket.joueur = {
             id: app.idDernierJoueur++,
-            x:100,
-            y:100
+            x:attribuerPosition(0, 200),
+            y:attribuerPosition(0, 200)
         },
 
         socket.emit('recupererJoueurs', recupererJoueurs());
@@ -39,6 +39,10 @@ io.on('connection',function(socket){
     });
 });
 
+function attribuerPosition(min, max){
+    var position = Math.floor((Math.random()*max)+min);
+    return parseInt(position);
+}
 function recupererJoueurs(){
     var tabJoueurs = [];
     Object.keys(io.sockets.connected).forEach(function(socketID){
