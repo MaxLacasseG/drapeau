@@ -8,6 +8,7 @@ var DRAPEAU = DRAPEAU || {};
 DRAPEAU.Jeu = function () {
     //DÉCLARATIONS DES PROPRIÉTÉS
     //Le nombre de blocs du jeu
+    var fleches;
   
 };
 
@@ -26,6 +27,7 @@ DRAPEAU.Jeu.prototype = {
         this.game.add.image(0, 0, "perso");
         console.log("Jeu");
         JOUEUR.nouveauJoueur();
+        this.fleches = this.game.input.keyboard.createCursorKeys();
     },
     /**
      * Fonction exécuté environ 60X / secondes

@@ -19,7 +19,4 @@ window.addEventListener("load", function(){
     jeu.state.add("Jeu", DRAPEAU.Jeu);
 
     jeu.state.start("Demarrage");
-
-
-
 },false);
