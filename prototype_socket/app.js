@@ -32,6 +32,14 @@ io.on('connection',function(socket){
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
 
+        //Si un joueur change la position en X
+        socket.on('majPosition', function(data){
+            socket.joueur.x = data.x;
+            socket.joueur.y = data.y;
+            io.emit('deplacement', socket.joueur);
+        });
+
+
        //Gestion de la deconnection 
        socket.on('disconnect', function(){
            console.log("deconnection:"+socket.joueur.id);
