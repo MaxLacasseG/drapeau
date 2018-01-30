@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/client.js"></script>
+    <title>TestChat</title>
+    <style>
+        body, html{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        main{
+            height: 100vh;
+        }
+        form {
+            box-sizing: border-box;
+            height: 100vh;
+            max-width: 100vw;
+            border: 2px solid tomato;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .boiteTexte {
+            flex: 1 1 60%;
+            min-height: 60vh;
+        }
+        .util{
+            flex: 0 1 auto;
+            min-height: 5vh;
+        }
+        .msg{
+            flex: 1 1 20%;
+            min-height: 10vh;
+        }
+        .chatBtnEnvoyer{
+            flex: 0 1 auto;
+            min-height: 5vh;
+        }
+        .nom{
+            font-size: 0.8em;
+            color: blueviolet;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <form action="#">
+            <div class="boiteTexte"></div>
+            <input type="text" class="util">
+            <input type="text" class="msg">
+            <input type="button" class="btnEnvoyer" value="Envoyer">
+        </form>
+    </main>
+    <script>
+        var util = document.querySelector('.util');
+        var msg = document.querySelector('.msg');
+        var bteTxt = document.querySelector('.boiteTexte');
+        var btn = document.querySelector('.btnEnvoyer');
+
+        btn.addEventListener('click', function(){
+            Client.envoyerMsg(util.value, msg.value);
+        });
+        function afficherMsg(util, msg){
+           var div = document.createElement('div');
+           div.innerHTML = util;
+           div.classList.add('nom');
+           bteTxt.appendChild(div);
+           var nMsg = document.createElement('div');
+           nMsg.innerHTML = msg;
+           bteTxt.appendChild(nMsg);
+        }
+    </script>
+</body>
+
+</html>
