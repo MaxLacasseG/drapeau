@@ -16,27 +16,40 @@ DRAPEAU.Jeu = function () {
 
 DRAPEAU.Jeu.prototype = {
     init: function () {
-        this.tabPerso = [];
+        this.tabPerso = {};
         this.game.stage.disableVisibilityChange = true;
     },
     preload: function () {
-        //console.log(this);
-        this.game.load.image('perso', 'medias/img/perso1.png');
+        this.game.load.image('perso', 'medias/img/perso0.png');
     },
     ajouterJoueur: function (id, x, y) {
-        this.tabPerso[id] = this.game.add.image(x, y, "perso");
-        this.perso = this.tabPerso[id];
-        this.perso.id = id;
+        this.tabPerso[id] = this.game.add.sprite(x, y, "perso");
+        this.perso = this.tabPerso[JOUEUR.drapeauID];
+    },
+    creerJoueur:function(){
+
     },
     enleverJoueur: function (id) {
-        console.log(this.tabPerso);
+        console.log("deconnection:"+this.tabPerso[id].id);
         this.tabPerso[id].destroy();
         delete this.tabPerso[id];
     },
     majPosition:function(id, x, y){
-        console.log(this.tabPerso);
-        this.tabPerso[0].position.x = x;
-        this.tabPerso[0].position.y = y;
+        console.log("deplacement"+this.tabPerso[id].id);
+        this.tabPerso[id].position.x = x;
+        this.tabPerso[id].position.y = y;
+    },
+    modifierCouleur(id){
+        switch(id){
+            case 0:
+            this.tabPerso[id].tint="0X0FFF00";
+            break;
+            case 1:
+            this.tabPerso[id].tint="0XFFFF00";
+            break;
+            default:
+            this.tabPerso[id].tint="0X0000FF";
+        }
     },
     /**
      * Fonction servant à la création du jeu
@@ -60,24 +73,24 @@ DRAPEAU.Jeu.prototype = {
      */
     update: function () {
         if (this.fleches.left.isDown) {
-
+            JOUEUR.monID();
             this.perso.position.x -= 10;
-            JOUEUR.majPosition(this.perso.position.x, this.perso.position.y);
+            JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
         }
         if (this.fleches.right.isDown) {
 
             this.perso.position.x += 10;
-            JOUEUR.majPosition(this.perso.position.x, this.perso.position.y);
+            JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
         }
         if (this.fleches.up.isDown) {
 
             this.perso.position.y -= 10;
-            JOUEUR.majPosition(this.perso.position.x, this.perso.position.y);
+            JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
         }
         if (this.fleches.down.isDown) {
 
             this.perso.position.y += 10;
-            JOUEUR.majPosition(this.perso.position.x, this.perso.position.y);
+            JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
         }
     }
 }; // Fin Jeu.prototype

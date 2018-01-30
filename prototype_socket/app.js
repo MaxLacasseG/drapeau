@@ -23,12 +23,14 @@ app.idDernierJoueur = 0;
 io.on('connection',function(socket){
     //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur',function(){
-        console.log("nouveauJoueur");
+        
         socket.joueur = {
             id: app.idDernierJoueur++,
             x:attribuerPosition(0, 200),
             y:attribuerPosition(0, 200)
         },
+        console.log("nouveauJoueur:"+socket.joueur.id);
+        socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
 
@@ -36,7 +38,7 @@ io.on('connection',function(socket){
         socket.on('majPosition', function(data){
             socket.joueur.x = data.x;
             socket.joueur.y = data.y;
-            io.emit('deplacement', socket.joueur);
+            io.sockets.emit('deplacement', socket.joueur);
         });
 
 
