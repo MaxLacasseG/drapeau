@@ -62,3 +62,6 @@ function recupererJoueurs(){
     });
     return tabJoueurs;
 }
+function finJeu(){
+    
+}

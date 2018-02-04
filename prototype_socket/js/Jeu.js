@@ -66,6 +66,7 @@ DRAPEAU.Jeu.prototype = {
         //Enregistrement des touches de jeu
         this.fleches = this.game.input.keyboard.createCursorKeys();
         //this.ajouterJoueur();
+        // ajouter cible
     },
     /**
      * Fonction exécuté environ 60X / secondes
