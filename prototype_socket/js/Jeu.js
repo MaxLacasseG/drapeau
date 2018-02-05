@@ -29,7 +29,8 @@ DRAPEAU.Jeu.prototype = {
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
         this.map.addTilesetImage('tuiles', 'tuiles');
-        this.map.setCollisionBetween(0, 8);
+        this.map.setCollision(4);
+        this.map.setCollision(3);
         this.fond = this.map.createLayer("fond");
         this.fond.resizeWorld();
     },
@@ -90,22 +91,25 @@ DRAPEAU.Jeu.prototype = {
      */
     update: function () {
         if (this.peutCommencer) {
-            this.game.physics.arcade.collide(this.perso, this.fond.layer);
+            this.game.physics.arcade.collide(this.perso, this.fond);
+            this.perso.body.velocity.x = 0;
+            this.perso.body.velocity.y = 0;
+    
             if (this.fleches.left.isDown) {
-                this.perso.position.x -= 50;
-                JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.x = -250;
+                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.right.isDown) {
-                this.perso.position.x += 50;
-                JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.x = 250;
+                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.up.isDown) {
-                this.perso.position.y -= 50;
-                JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.y = -250;
+                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.down.isDown) {
-                this.perso.position.y += 50;
-                JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.y = 250;
+                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
         }
