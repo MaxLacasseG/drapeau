@@ -25,7 +25,8 @@ JOUEUR.socket.on('nouveauJoueur', function(joueur){
 });
 JOUEUR.socket.on('assignerID',function(id){
     JOUEUR.drapeauID = id;
-})
+});
+
 JOUEUR.socket.on('recupererJoueurs', function(tabJoueurs){
     for(var i = 0; i < tabJoueurs.length; i++){
         JOUEUR.jeu.state.states.Jeu.ajouterJoueur(tabJoueurs[i].id, tabJoueurs[i].x, tabJoueurs[i].y);

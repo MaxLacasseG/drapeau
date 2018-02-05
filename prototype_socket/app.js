@@ -26,8 +26,8 @@ io.on('connection',function(socket){
         
         socket.joueur = {
             id: app.idDernierJoueur++,
-            x:attribuerPosition(0, 200),
-            y:attribuerPosition(0, 200)
+            x:attribuerPosition(800,900),
+            y:attribuerPosition(800,900)
         },
         console.log("nouveauJoueur:"+socket.joueur.id);
         socket.emit('assignerID', socket.joueur.id);
