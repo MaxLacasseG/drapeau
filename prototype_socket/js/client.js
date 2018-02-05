@@ -8,7 +8,7 @@ JOUEUR.nouveauJoueur = function(){
     JOUEUR.socket.emit('nouveauJoueur');
 };
 JOUEUR.monID = function(){
-    console.log(JOUEUR.drapeauID);
+    //console.log(JOUEUR.drapeauID);
     //JOUEUR.socket.emit('monID', JOUEUR.id);
 };
 

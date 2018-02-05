@@ -29,20 +29,17 @@ DRAPEAU.Jeu.prototype = {
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
         this.map.addTilesetImage('tuiles', 'tuiles');
-        this.fond = this.map.createLayer('fond');
-        this.murs = this.map.createLayer('murs');
-        this.base = this.map.createLayer('base');
+        this.map.setCollisionBetween(0, 8);
+        this.fond = this.map.createLayer("fond");
         this.fond.resizeWorld();
-        this.murs.resizeWorld();
-        this.base.resizeWorld();
-
     },
     ajouterJoueur: function (id, x, y) {
         //console.log(id, x,y);
         this.tabPerso[id] = this.game.add.sprite(x, y, "perso");
+        this.tabPerso[id].anchor.set(0.5);
         this.game.physics.arcade.enable(this.tabPerso[id]);
         this.tabPerso[id].body.collideWorldBounds = true;
-        
+
         this.perso = this.tabPerso[JOUEUR.drapeauID];
         this.creerJoueur();
         this.peutCommencer = true;
@@ -80,7 +77,6 @@ DRAPEAU.Jeu.prototype = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.creerCarte();
         this.game.world.setBounds(0, 0, 6400, 6400);
-
         //Ajout du personnage    
         //Message au serveur
         JOUEUR.nouveauJoueur();
@@ -94,27 +90,26 @@ DRAPEAU.Jeu.prototype = {
      */
     update: function () {
         if (this.peutCommencer) {
+            this.game.physics.arcade.collide(this.perso, this.fond.layer);
             if (this.fleches.left.isDown) {
-                JOUEUR.monID();
                 this.perso.position.x -= 50;
                 JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.right.isDown) {
-
                 this.perso.position.x += 50;
                 JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.up.isDown) {
-
                 this.perso.position.y -= 50;
                 JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.down.isDown) {
-
                 this.perso.position.y += 50;
                 JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
+            this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
         }
         this.game.debug.cameraInfo(this.game.camera, 32, 32);
+
     }
 }; // Fin Jeu.prototype
