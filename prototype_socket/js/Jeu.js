@@ -11,8 +11,9 @@ DRAPEAU.Jeu = function () {
     var fleches;
     var perso;
     var tabPerso;
-    var map, fond, murs, base;
+    var map, couches;
     var peutCommencer = false;
+    var signaux;
 
 };
 
@@ -29,10 +30,17 @@ DRAPEAU.Jeu.prototype = {
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
         this.map.addTilesetImage('tuiles', 'tuiles');
-        this.map.setCollision(4);
-        this.map.setCollision(3);
-        this.fond = this.map.createLayer("fond");
-        this.fond.resizeWorld();
+        this.couches = {
+           "fond":this.map.createLayer("fond"),
+           "murs":this.map.createLayer("murs"),
+           "base":this.map.createLayer("base")
+        }
+        this.couches.fond.resizeWorld();
+        this.couches.murs.resizeWorld();
+        this.couches.base.resizeWorld();
+
+        this.map.setCollision(4, true, this.couches.murs);
+        this.map.setCollision(3, true, this.couches.base);
     },
     ajouterJoueur: function (id, x, y) {
         //console.log(id, x,y);
@@ -74,6 +82,9 @@ DRAPEAU.Jeu.prototype = {
      * Fonction servant à la création du jeu
      */
     create: function () {
+        this.signaux = new Phaser.Signal();
+        this.signaux.add(this.toucheBase, this);
+        console.log("signaux",this.signaux, "this", this);
         //Démarrage du système de physique
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.creerCarte();
@@ -85,30 +96,37 @@ DRAPEAU.Jeu.prototype = {
         //Enregistrement des touches de jeu
         this.fleches = this.game.input.keyboard.createCursorKeys();
     },
+    collisionAvecFond:function(perso, fond){
+        this.signaux.dispatch(this.perso, this.game);
+    },
+    toucheBase:function(perso){
+        console.log("perso", perso);
+    },
     /**
      * Fonction exécuté environ 60X / secondes
      * Vérifie la direction du curseur lorsqu'un élément est cliqué et l'ajoute comme blocActif2
      */
     update: function () {
         if (this.peutCommencer) {
-            this.game.physics.arcade.collide(this.perso, this.fond);
+            this.game.physics.arcade.collide(this.perso, this.couches.murs, this.collisionAvecFond, null, this);
+            this.game.physics.arcade.collide(this.perso, this.couches.base, this.collisionAvecFond, null, this);
             this.perso.body.velocity.x = 0;
             this.perso.body.velocity.y = 0;
     
             if (this.fleches.left.isDown) {
-                this.perso.body.velocity.x = -250;
+                this.perso.body.velocity.x = -550;
                 //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.right.isDown) {
-                this.perso.body.velocity.x = 250;
+                this.perso.body.velocity.x = 550;
                 //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.up.isDown) {
-                this.perso.body.velocity.y = -250;
+                this.perso.body.velocity.y = -550;
                 //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.down.isDown) {
-                this.perso.body.velocity.y = 250;
+                this.perso.body.velocity.y = 550;
                 //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
             this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
