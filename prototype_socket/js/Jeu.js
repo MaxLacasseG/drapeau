@@ -23,9 +23,9 @@ DRAPEAU.Jeu.prototype = {
         this.game.stage.disableVisibilityChange = true;
     },
     preload: function () {
-        this.game.load.tilemap('carte', 'medias/carte/carte.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.image('tuiles', 'medias/carte/tuiles.png');
-        this.game.load.image('perso', 'medias/img/perso0.png');
+        this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.image('tuiles', 'medias/carte/tileset.png');
+        this.game.load.image('perso', 'medias/img/hero-idle-side.png');
     },
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
