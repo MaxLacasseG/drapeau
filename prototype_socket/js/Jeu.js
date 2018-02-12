@@ -24,12 +24,12 @@ DRAPEAU.Jeu.prototype = {
     },
     preload: function () {
         this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.image('tuiles', 'medias/carte/tileset.png');
+        this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
     },
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
-        this.map.addTilesetImage('tuiles', 'tuiles');
+        this.map.addTilesetImage('environnement', 'environnement');
         this.couches = {
            "fond":this.map.createLayer("fond"),
            "murs":this.map.createLayer("murs"),
@@ -39,7 +39,8 @@ DRAPEAU.Jeu.prototype = {
         this.couches.murs.resizeWorld();
         this.couches.base.resizeWorld();
 
-        this.map.setCollision(4, true, this.couches.murs);
+        this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
+        
         this.map.setCollision(3, true, this.couches.base);
     },
     ajouterJoueur: function (id, x, y) {
@@ -84,11 +85,12 @@ DRAPEAU.Jeu.prototype = {
     create: function () {
         this.signaux = new Phaser.Signal();
         this.signaux.add(this.toucheBase, this);
-        console.log("signaux",this.signaux, "this", this);
+       
         //Démarrage du système de physique
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.creerCarte();
-        this.game.world.setBounds(0, 0, 6400, 6400);
+        this.game.world.setBounds(0, 0, 1600,1600);
+        
         //Ajout du personnage    
         //Message au serveur
         JOUEUR.nouveauJoueur();
@@ -129,9 +131,9 @@ DRAPEAU.Jeu.prototype = {
                 this.perso.body.velocity.y = 550;
                 //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
             }
-            this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
+            //this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
         }
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        //this.game.debug.cameraInfo(this.game.camera, 32, 32);
 
     }
 }; // Fin Jeu.prototype
