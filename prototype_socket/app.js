@@ -3,6 +3,9 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 
+app.set('port', (process.env.PORT || 8081));
+
+
 app.use('/css', express.static(__dirname+'/css'));
 app.use('/js', express.static(__dirname+'/js'));
 app.use('/medias', express.static(__dirname+'/medias'));
@@ -13,7 +16,7 @@ app.get('/', function(req,res){
     res.sendFile(__dirname + '/index.html');
 });
 
-server.listen(8081,function(){ // Listens to port 8081
+server.listen(app.get('port'),function(){ // Listens to port 8081
     console.log('Listening on '+server.address().port);
 });
 
