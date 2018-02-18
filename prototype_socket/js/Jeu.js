@@ -14,6 +14,7 @@ DRAPEAU.Jeu = function () {
     var map, couches;
     var peutCommencer = false;
     var signaux;
+    var drapeau;
 
 };
 
@@ -26,6 +27,7 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
+        this.game.load.image('drapeau', 'medias/img/drapeau.png');
     },
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
@@ -93,16 +95,21 @@ DRAPEAU.Jeu.prototype = {
         
         //Ajout du personnage    
         //Message au serveur
+        
         JOUEUR.nouveauJoueur();
 
         //Enregistrement des touches de jeu
         this.fleches = this.game.input.keyboard.createCursorKeys();
     },
+    assignerDrapeau: function(drapeau){
+        console.log(drapeau);
+        this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
+    },
     collisionAvecFond:function(perso, fond){
         this.signaux.dispatch(this.perso, this.game);
     },
     toucheBase:function(perso){
-        console.log("perso", perso);
+        //console.log("perso", perso);
     },
     /**
      * Fonction exécuté environ 60X / secondes

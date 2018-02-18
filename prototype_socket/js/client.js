@@ -19,6 +19,8 @@ JOUEUR.majPosition = function(id, posX, posY){
 //=====================================
 //=====================================
 //Écouteurs de signaux du serveur
+
+
 JOUEUR.socket.on('nouveauJoueur', function(joueur){
     JOUEUR.jeu.state.states.Jeu.ajouterJoueur(joueur.id,joueur.x,joueur.y);
     JOUEUR.jeu.state.states.Jeu.modifierCouleur(joueur.id);
@@ -40,4 +42,19 @@ JOUEUR.socket.on('enleverJoueur', function(joueur){
 
 JOUEUR.socket.on('deplacement', function(joueur){
     JOUEUR.jeu.state.states.Jeu.majPosition(joueur.id, joueur.x, joueur.y);
-})
+});
+
+//GESTION DU DRAPEAU
+JOUEUR.socket.on('assignerDrapeauPos', function(drapeau){
+    console.log(JOUEUR.jeu.state.states.Jeu.assignerDrapeau);
+    JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
+});
+
+JOUEUR.socket.on('attribuerDrapeau', function(drapeau, id){
+    console.log('drapeau attrapé');
+});
+
+JOUEUR.socket.on('majDrapeauPos', function(drapeau){
+    console.log(JOUEUR.jeu.state.states.Jeu.assignerDrapeau);
+    JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
+});

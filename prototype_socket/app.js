@@ -18,15 +18,21 @@ app.get('/', function(req,res){
 
 server.listen(app.get('port'),function(){ // Listens to port 8081
     console.log('Listening on '+server.address().port);
+    app.drapeau = {
+        x:10,
+        y:10,
+        equipe:null
+    }
 });
 
 //Section de gestion des événements sockets
 //Eve. lancée lors d'une connexion au serveur
 app.idDernierJoueur = 0;
 io.on('connection',function(socket){
+    //Assignation du drapeau
     //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur',function(){
-        
+        socket.emit('assignerDrapeauPos', app.drapeau);
         socket.joueur = {
             id: app.idDernierJoueur++,
             x:attribuerPosition(600,600),
@@ -39,7 +45,7 @@ io.on('connection',function(socket){
 
         //Si un joueur change la position en X
         socket.on('majPosition', function(data){
-            console.log('deplacement:' + data.id);
+            //console.log('deplacement:' + data.id);
             socket.joueur.x = data.x;
             socket.joueur.y = data.y;
             socket.joueur.id = data.id;
