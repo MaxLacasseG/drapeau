@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/phaser.js"></script>
+    <script src="/js/Drapeau.js"></script>
+    <script src="/js/Demarrage.js"></script>
+    <script src="/js/Jeu.js"></script>
+    <script src="/js/client.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <title>Prototype phaser utilisant Socket</title>
+</head>
+<body>
+    <%console.log(data)%>
+    <div data-equipe='<%= data.equipe%>' data-nom='<%= data.nom%>' id="jeuConteneur"></div>
+</body>
+</html>

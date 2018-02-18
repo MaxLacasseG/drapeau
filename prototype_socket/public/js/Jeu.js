@@ -22,6 +22,13 @@ DRAPEAU.Jeu.prototype = {
     init: function () {
         this.tabPerso = {};
         this.game.stage.disableVisibilityChange = true;
+        this.drapeau = {
+            x: 0,
+            y: 0,
+            equipe: null,
+            joueur: null
+        }
+
     },
     preload: function () {
         this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
@@ -33,16 +40,16 @@ DRAPEAU.Jeu.prototype = {
         this.map = this.game.add.tilemap('carte');
         this.map.addTilesetImage('environnement', 'environnement');
         this.couches = {
-           "fond":this.map.createLayer("fond"),
-           "murs":this.map.createLayer("murs"),
-           "base":this.map.createLayer("base")
+            "fond": this.map.createLayer("fond"),
+            "murs": this.map.createLayer("murs"),
+            "base": this.map.createLayer("base")
         }
         this.couches.fond.resizeWorld();
         this.couches.murs.resizeWorld();
         this.couches.base.resizeWorld();
 
         this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
-        
+
         this.map.setCollision(3, true, this.couches.base);
     },
     ajouterJoueur: function (id, x, y) {
@@ -55,6 +62,21 @@ DRAPEAU.Jeu.prototype = {
         this.perso = this.tabPerso[JOUEUR.drapeauID];
         this.creerJoueur();
         this.peutCommencer = true;
+        console.log(this.game.canvas.parentElement.attributes['data-equipe'].value);
+        var equipe = this.game.canvas.parentElement.attributes['data-equipe'].value;
+        switch (equipe) {
+            case "1":
+                document.querySelector('body').style.backgroundColor = "#aa201b";
+                break;
+            case "2":
+                document.querySelector('body').style.backgroundColor = "#77a82d";
+                break;
+            case "3":
+                document.querySelector('body').style.backgroundColor = "#2d7ea8";
+                break;
+        }
+
+        document.querySelector('body').style
     },
     creerJoueur: function () {
         this.game.camera.follow(this.tabPerso[JOUEUR.drapeauID]);
@@ -87,28 +109,28 @@ DRAPEAU.Jeu.prototype = {
     create: function () {
         this.signaux = new Phaser.Signal();
         this.signaux.add(this.toucheBase, this);
-       
+
         //Démarrage du système de physique
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.creerCarte();
-        this.game.world.setBounds(0, 0, 1600,1600);
-        
+        this.game.world.setBounds(0, 0, 1600, 1600);
+
         //Ajout du personnage    
         //Message au serveur
-        
+
         JOUEUR.nouveauJoueur();
 
         //Enregistrement des touches de jeu
         this.fleches = this.game.input.keyboard.createCursorKeys();
     },
-    assignerDrapeau: function(drapeau){
+    assignerDrapeau: function (drapeau) {
         console.log(drapeau);
         this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
     },
-    collisionAvecFond:function(perso, fond){
+    collisionAvecFond: function (perso, fond) {
         this.signaux.dispatch(this.perso, this.game);
     },
-    toucheBase:function(perso){
+    toucheBase: function (perso) {
         //console.log("perso", perso);
     },
     /**
@@ -121,7 +143,7 @@ DRAPEAU.Jeu.prototype = {
             this.game.physics.arcade.collide(this.perso, this.couches.base, this.collisionAvecFond, null, this);
             this.perso.body.velocity.x = 0;
             this.perso.body.velocity.y = 0;
-    
+
             if (this.fleches.left.isDown) {
                 this.perso.body.velocity.x = -350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
