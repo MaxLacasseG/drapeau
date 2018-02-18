@@ -32,16 +32,18 @@ io.on('connection',function(socket){
             x:attribuerPosition(600,600),
             y:attribuerPosition(600,600)
         },
-        console.log("nouveauJoueur:"+socket.joueur.id);
+        //console.log("nouveauJoueur:"+socket.joueur.id);
         socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
 
         //Si un joueur change la position en X
         socket.on('majPosition', function(data){
+            console.log('deplacement:' + data.id);
             socket.joueur.x = data.x;
             socket.joueur.y = data.y;
-            io.sockets.emit('deplacement', socket.joueur);
+            socket.joueur.id = data.id;
+            socket.broadcast.emit('deplacement', socket.joueur);
         });
 
 

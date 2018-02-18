@@ -63,7 +63,7 @@ DRAPEAU.Jeu.prototype = {
         delete this.tabPerso[id];
     },
     majPosition: function (id, x, y) {
-        //console.log("deplacement" + this.tabPerso[JOUEUR.drapeauID]);
+        //console.log("deplacementserveur" + this.tabPerso[id]);
         this.tabPerso[id].position.x = x;
         this.tabPerso[id].position.y = y;
     },
@@ -116,20 +116,20 @@ DRAPEAU.Jeu.prototype = {
             this.perso.body.velocity.y = 0;
     
             if (this.fleches.left.isDown) {
-                this.perso.body.velocity.x = -550;
-                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.x = -350;
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.right.isDown) {
-                this.perso.body.velocity.x = 550;
-                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.x = 350;
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.up.isDown) {
-                this.perso.body.velocity.y = -550;
-                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.y = -350;
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.down.isDown) {
-                this.perso.body.velocity.y = 550;
-                //JOUEUR.majPosition(this.perso.id, this.perso.position.x, this.perso.position.y);
+                this.perso.body.velocity.y = 350;
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
             //this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
         }
