@@ -5,6 +5,55 @@ body {
   box-sizing: border-box;
   display: flex;
 }
+html .conteneurPrincJeu,
+body .conteneurPrincJeu {
+  display: flex;
+  padding: 2em;
+}
+html .conteneurPrincJeu header,
+body .conteneurPrincJeu header {
+  flex: 1 1 10%;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25em;
+  margin-right: 3em;
+}
+html .conteneurPrincJeu header img,
+body .conteneurPrincJeu header img {
+  width: 5vw;
+  height: auto;
+}
+html .conteneurPrincJeu header h1,
+body .conteneurPrincJeu header h1 {
+  font-variant: small-caps;
+  color: sienna;
+  letter-spacing: 0.2em;
+  font-family: 'Alegreya', serif;
+  font-size: 1.2em;
+  margin-bottom: 2em;
+}
+html .conteneurPrincJeu header .entete,
+body .conteneurPrincJeu header .entete {
+  display: flex;
+  flex-direction: column;
+}
+html .conteneurPrincJeu header .entete p,
+body .conteneurPrincJeu header .entete p {
+  font-family: 'Alegreya', sans-serif;
+}
+html .conteneurPrincJeu header .entete p.soustitre,
+body .conteneurPrincJeu header .entete p.soustitre {
+  margin-top: 1em;
+  color: #39481f;
+  font-weight: 600;
+}
+html .conteneurPrincJeu header .entete p.data,
+body .conteneurPrincJeu header .entete p.data {
+  font-size: 1.5em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: darkolivegreen;
+}
 html .conteneurPrinc,
 body .conteneurPrinc {
   flex: 1 0 auto;

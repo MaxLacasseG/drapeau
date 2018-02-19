@@ -4,6 +4,50 @@ body {
     height: 100vh;
     box-sizing: border-box;
     display: flex;
+    & .conteneurPrincJeu {
+        display: flex;
+        padding: 2em;
+        & header {
+            flex: 1 1 10%;
+            display: flex;
+            flex-direction: column;
+            padding: 0.25em;
+            margin-right: 3em;
+            & img {
+                width: 5vw;
+                height: auto;
+            }
+            & h1 {
+                font-variant: small-caps;
+                color: sienna;
+                letter-spacing: 0.2em;
+                font-family: 'Alegreya', serif;
+                font-size: 1.2em;
+                margin-bottom: 2em;
+            }
+            & .entete {
+                display: flex;
+                flex-direction: column;
+               
+                & p {
+                    font-family: 'Alegreya', sans-serif;
+                   
+                    &.soustitre{
+                        margin-top: 1em;
+                        color: darken(rgb(85, 107, 47), 10%);
+                        font-weight: 600;
+                    }
+                    &.data{
+                        font-size: 1.5em;
+                        font-weight: 400;
+                        letter-spacing: 0.1em;
+                        color: darkolivegreen;
+                    }
+                }
+
+            }
+        }
+    }
     & .conteneurPrinc {
         flex: 1 0 auto;
         padding: 5em;
@@ -27,11 +71,11 @@ body {
             display: flex;
             &>section {
                 flex: 0 1 50%;
-                &.gc{
+                &.gc {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    & img{
+                    & img {
                         max-width: 50%;
                     }
                 }
@@ -102,9 +146,8 @@ body {
                                         transition: border 250ms, background-color 500ms;
                                         flex: 0 1 50%;
                                         border-radius: 0.2em;
-                                        width:40px;
+                                        width: 40px;
                                         height: 40px;
-                                        
                                         &:hover {
                                             cursor: pointer;
                                             background-color: darkslategrey;
@@ -133,13 +176,12 @@ body {
                             &:nth-of-type(1) p {
                                 background-color: darkslategrey;
                                 transition: background-color 500ms;
-                                &:hover{
-                                    background-color:darken(rgb(47, 79, 79), 10%);
+                                &:hover {
+                                    background-color: darken(rgb(47, 79, 79), 10%);
                                 }
                             }
-                            &:hover{
-                                cursor:pointer;
-                                
+                            &:hover {
+                                cursor: pointer;
                             }
                             & p {
                                 background-color: darkolivegreen;
@@ -150,8 +192,8 @@ body {
                                 font-variant: small-caps;
                                 font-size: 1.2em;
                                 transition: background-color 500ms;
-                                &:hover{
-                                    background-color:darken(rgb(85, 107, 47), 10%);
+                                &:hover {
+                                    background-color: darken(rgb(85, 107, 47), 10%);
                                 }
                             }
                         }
