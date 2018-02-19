@@ -100,7 +100,7 @@ DRAPEAU.Jeu.prototype = {
 
         this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
 
-        this.map.setCollision(3, true, this.couches.base);
+        this.map.setCollision(195, true, this.couches.base);
     },
     create: function () {
         this.signaux = new Phaser.Signal();
@@ -131,8 +131,8 @@ DRAPEAU.Jeu.prototype = {
     collisionAvecFond: function (perso, fond) {
         this.signaux.dispatch(this.perso, this.game);
     },
-    toucheBase: function (perso) {
-        //console.log("perso", perso);
+    toucheBase: function (perso, fond) {
+       console.log("base");
     },
 
     // =====================================
@@ -143,8 +143,8 @@ DRAPEAU.Jeu.prototype = {
      */
     update: function () {
         if (this.peutCommencer) {
-            this.game.physics.arcade.collide(this.perso, this.couches.murs, this.collisionAvecFond, null, this);
-            this.game.physics.arcade.collide(this.perso, this.couches.base, this.collisionAvecFond, null, this);
+            this.game.physics.arcade.collide(this.perso, this.couches.murs);
+            this.game.physics.arcade.collide(this.perso, this.couches.base, this.toucheBase, null, this);
             this.perso.body.velocity.x = 0;
             this.perso.body.velocity.y = 0;
 
