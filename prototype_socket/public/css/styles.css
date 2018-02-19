@@ -1,8 +1,190 @@
-body, html{
-    margin: 0;
-    padding: 0;
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
 }
-
-body{
-    background-color: black;
+html .conteneurPrinc,
+body .conteneurPrinc {
+  flex: 1 0 auto;
+  padding: 5em;
+  display: flex;
+  flex-direction: column;
+}
+html .conteneurPrinc header,
+body .conteneurPrinc header {
+  padding: 0.1em 0;
+  flex: 1 1 5%;
+}
+html .conteneurPrinc header h1,
+body .conteneurPrinc header h1 {
+  text-align: right;
+  font-variant: small-caps;
+  color: sienna;
+  letter-spacing: 0.2em;
+  font-family: 'Alegreya', serif;
+  font-size: 5em;
+}
+html .conteneurPrinc .formBloc,
+body .conteneurPrinc .formBloc {
+  padding: 0.2em 0;
+  flex: 1 1 auto;
+  display: flex;
+}
+html .conteneurPrinc .formBloc > section,
+body .conteneurPrinc .formBloc > section {
+  flex: 0 1 50%;
+}
+html .conteneurPrinc .formBloc > section.gc,
+body .conteneurPrinc .formBloc > section.gc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html .conteneurPrinc .formBloc > section.gc img,
+body .conteneurPrinc .formBloc > section.gc img {
+  max-width: 50%;
+}
+html .conteneurPrinc .formBloc > section.dr,
+body .conteneurPrinc .formBloc > section.dr {
+  display: flex;
+  flex-direction: column;
+}
+html .conteneurPrinc .formBloc > section.dr form,
+body .conteneurPrinc .formBloc > section.dr form {
+  flex: 1 1 70%;
+  display: flex;
+  flex-direction: column;
+}
+html .conteneurPrinc .formBloc > section.dr form label,
+body .conteneurPrinc .formBloc > section.dr form label {
+  flex: 1 1 50%;
+  font-family: 'Alegreya', sans-serif;
+  font-size: 2em;
+  font-weight: 500;
+  color: darkolivegreen;
+}
+html .conteneurPrinc .formBloc > section.dr form .nomGroupe,
+body .conteneurPrinc .formBloc > section.dr form .nomGroupe {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+html .conteneurPrinc .formBloc > section.dr form .nomGroupe label,
+body .conteneurPrinc .formBloc > section.dr form .nomGroupe label {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html .conteneurPrinc .formBloc > section.dr form .nomGroupe input,
+body .conteneurPrinc .formBloc > section.dr form .nomGroupe input {
+  flex: 1 1 50%;
+  background-color: darkolivegreen;
+  color: cornsilk;
+  font-size: 2em;
+  text-align: center;
+  padding: 0.2em;
+  font-family: 'Alegreya', sans-serif;
+  border: none;
+  border-radius: 0.2em;
+  box-shadow: darkslategrey 0 0 5px 2px inset;
+}
+html .conteneurPrinc .formBloc > section.dr form .nomGroupe input > *,
+body .conteneurPrinc .formBloc > section.dr form .nomGroupe input > * {
+  border: none;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe p,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe p {
+  text-align: center;
+  font-family: 'Alegreya', sans-serif;
+  font-size: 2em;
+  font-weight: 500;
+  color: darkolivegreen;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe {
+  display: flex;
+  padding: 1em;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div {
+  padding: 0.3em;
+  flex: 1 1 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label {
+  transition: border 250ms, background-color 500ms;
+  flex: 0 1 50%;
+  border-radius: 0.2em;
+  width: 40px;
+  height: 40px;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label:hover,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label:hover {
+  cursor: pointer;
+  background-color: darkslategrey;
+  color: cornsilk;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input {
+  display: none;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input:checked + label,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input:checked + label {
+  background-color: darkolivegreen;
+  color: cornsilk;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe {
+  flex: 1 1 30%;
+  display: flex;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe div,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe div {
+  flex: 1 1 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p {
+  background-color: darkslategrey;
+  transition: background-color 500ms;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p:hover,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p:hover {
+  background-color: #1c2f2f;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe div:hover,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe div:hover {
+  cursor: pointer;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe div p,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe div p {
+  background-color: darkolivegreen;
+  padding: 1em 3em;
+  border-radius: 0.2em;
+  color: cornsilk;
+  font-family: 'Alegreya', sans-serif;
+  font-variant: small-caps;
+  font-size: 1.2em;
+  transition: background-color 500ms;
+}
+html .conteneurPrinc .formBloc > section.dr .btnGroupe div p:hover,
+body .conteneurPrinc .formBloc > section.dr .btnGroupe div p:hover {
+  background-color: #39481f;
 }

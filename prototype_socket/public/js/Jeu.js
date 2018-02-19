@@ -62,21 +62,7 @@ DRAPEAU.Jeu.prototype = {
         this.perso = this.tabPerso[JOUEUR.drapeauID];
         this.creerJoueur();
         this.peutCommencer = true;
-        console.log(this.game.canvas.parentElement.attributes['data-equipe'].value);
-        var equipe = this.game.canvas.parentElement.attributes['data-equipe'].value;
-        switch (equipe) {
-            case "1":
-                document.querySelector('body').style.backgroundColor = "#aa201b";
-                break;
-            case "2":
-                document.querySelector('body').style.backgroundColor = "#77a82d";
-                break;
-            case "3":
-                document.querySelector('body').style.backgroundColor = "#2d7ea8";
-                break;
-        }
-
-        document.querySelector('body').style
+       
     },
     creerJoueur: function () {
         this.game.camera.follow(this.tabPerso[JOUEUR.drapeauID]);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +12,20 @@
     <script src="/js/Jeu.js"></script>
     <script src="/js/client.js"></script>
     <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Bellefair|Open+Sans" rel="stylesheet">
 
     <title>Prototype phaser utilisant Socket</title>
 </head>
+
 <body>
-    <%console.log(data)%>
+    <header>
+        <h1>Drapeau</h1>
+        <div class="entete">
+            <p class="equipe<%= data.equipe%>"><%= data.nom%></p>
+            <p class="equipe<%= data.equipe%>">Équipe|<%= data.equipe%></p>
+        </div>
+    </header>
     <div data-equipe='<%= data.equipe%>' data-nom='<%= data.nom%>' id="jeuConteneur"></div>
 </body>
+
 </html>

@@ -3,22 +3,24 @@
 var DRAPEAU = DRAPEAU || {};
 
 DRAPEAU = {
-    // Variables de jeu
-    instance:null
 };
 
 window.addEventListener("load", function(){
+    let parent = document.querySelector('#jeuConteneur');
+    let w = parent.clientWidth;
+    let h = parent.clientHeight;
+    
     var config = {
-        height : 600,
-        width: 600,
-        parent: "jeuConteneur"
+        height : h,
+        width: w,
+        parent: "jeuConteneur",
+        scaleMode: Phaser.ScaleManager.USER_SCALE
     };
-
+    
     var jeu = new Phaser.Game(config);
     jeu.state.add("Demarrage", DRAPEAU.Demarrage);
     jeu.state.add("Jeu", DRAPEAU.Jeu);
 
     jeu.state.start("Demarrage");
-    this.instance = jeu;
     JOUEUR.jeu = jeu;
 },false);

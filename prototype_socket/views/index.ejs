@@ -1,23 +1,67 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Alegreya|Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/styles.css">
+
     <title>Jeu avec phaser</title>
 </head>
+
 <body>
-    <form action="/jeu" method="POST">
-        <label for="nom">Nom</label>
-        <input type="text" name="nom" id="nom">
-        <p>Équipe</p>
-        <label for="equipe1">1</label>
-        <input type="radio" name="equipe" id="equipe1" value=1>
-        <label for="equipe2">2</label>
-        <input type="radio" name="equipe" id="equipe2" value=2>
-        <label for="equipe3">3</label>
-        <input type="radio" name="equipe" id="equipe3" value=3>
-        <input type="submit" value="C'est parti!">
-    </form>
+    <div class="conteneurPrinc">
+        <header>
+            <h1>Le drapeau</h1>
+        </header>
+        <div class="formBloc">
+            <section class="gc">
+                <img src="/medias/img/logo.png" alt="logo">
+            </section>
+            <section class="dr">
+                <form id="formDemarrage" action="/jeu" method="POST">
+                    <div class="nomGroupe">
+                        <label for="nom">Votre nom</label>
+                        <input type="text" name="nom" id="nom" required>
+                    </div>
+                    <div class="equipeGroupe">
+                        <p>Votre équipe</p>
+                        <div class="radioGroupe">
+                            <div>
+                                <input type="radio" name="equipe" id="equipe1" value="1" required>
+                                <label for="equipe1">1</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="equipe" id="equipe2" value="2" required>
+                                <label for="equipe2">2</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="equipe" id="equipe3" value="3" required>
+                                <label for="equipe3">3</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="btnGroupe">
+                    <div>
+                        <p class="instructions">Le jeu</p>
+                    </div>
+                    <div>
+                        <p class="demarrage">C'est parti</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    <script>
+        document.querySelector('.demarrage').addEventListener('click', ()=>{
+            document.querySelector('#formDemarrage').submit();
+        },false);
+    </script>
 </body>
+
 </html>

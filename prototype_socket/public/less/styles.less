@@ -1,0 +1,163 @@
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    & .conteneurPrinc {
+        flex: 1 0 auto;
+        padding: 5em;
+        display: flex;
+        flex-direction: column;
+        & header {
+            padding: 0.1em 0;
+            flex: 1 1 5%;
+            & h1 {
+                text-align: right;
+                font-variant: small-caps;
+                color: sienna;
+                letter-spacing: 0.2em;
+                font-family: 'Alegreya', serif;
+                font-size: 5em;
+            }
+        }
+        & .formBloc {
+            padding: 0.2em 0;
+            flex: 1 1 auto;
+            display: flex;
+            &>section {
+                flex: 0 1 50%;
+                &.gc{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    & img{
+                        max-width: 50%;
+                    }
+                }
+                &.dr {
+                    display: flex;
+                    flex-direction: column;
+                    & form {
+                        flex: 1 1 70%;
+                        display: flex;
+                        flex-direction: column;
+                        & label {
+                            flex: 1 1 50%;
+                            font-family: 'Alegreya', sans-serif;
+                            font-size: 2em;
+                            font-weight: 500;
+                            color: darkolivegreen;
+                        }
+                        & .nomGroupe {
+                            flex: 1 1 50%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            & label {
+                                text-align: center;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            }
+                            & input {
+                                flex: 1 1 50%;
+                                background-color: darkolivegreen;
+                                color: cornsilk;
+                                font-size: 2em;
+                                text-align: center;
+                                padding: 0.2em;
+                                font-family: 'Alegreya', sans-serif;
+                                border: none;
+                                border-radius: 0.2em;
+                                box-shadow: darkslategrey 0 0 5px 2px inset;
+                                &>* {
+                                    border: none;
+                                }
+                            }
+                        }
+                        & .equipeGroupe {
+                            flex: 1 1 50%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            & p {
+                                text-align: center;
+                                font-family: 'Alegreya', sans-serif;
+                                font-size: 2em;
+                                font-weight: 500;
+                                color: darkolivegreen;
+                            }
+                            & .radioGroupe {
+                                display: flex;
+                                padding: 1em;
+                                &>div {
+                                    padding: 0.3em;
+                                    flex: 1 1 33%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    text-align: center;
+                                    & label {
+                                        transition: border 250ms, background-color 500ms;
+                                        flex: 0 1 50%;
+                                        border-radius: 0.2em;
+                                        width:40px;
+                                        height: 40px;
+                                        
+                                        &:hover {
+                                            cursor: pointer;
+                                            background-color: darkslategrey;
+                                            color: cornsilk;
+                                        }
+                                    }
+                                    & input {
+                                        display: none;
+                                        &:checked+label {
+                                            background-color: darkolivegreen;
+                                            color: cornsilk;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    & .btnGroupe {
+                        flex: 1 1 30%;
+                        display: flex;
+                        & div {
+                            flex: 1 1 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            &:nth-of-type(1) p {
+                                background-color: darkslategrey;
+                                transition: background-color 500ms;
+                                &:hover{
+                                    background-color:darken(rgb(47, 79, 79), 10%);
+                                }
+                            }
+                            &:hover{
+                                cursor:pointer;
+                                
+                            }
+                            & p {
+                                background-color: darkolivegreen;
+                                padding: 1em 3em;
+                                border-radius: 0.2em;
+                                color: cornsilk;
+                                font-family: 'Alegreya', sans-serif;
+                                font-variant: small-caps;
+                                font-size: 1.2em;
+                                transition: background-color 500ms;
+                                &:hover{
+                                    background-color:darken(rgb(85, 107, 47), 10%);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
