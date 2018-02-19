@@ -34,8 +34,58 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
-        this.game.load.image('drapeau', 'medias/img/drapeau.png');
+        this.game.load.image('drapeau', 'medias/img/gem-1.png');
     },
+
+    // =========================
+    // ==== GESTION JOUEUR
+    // =========================
+    ajouterJoueur: function (id, x, y, equipe, nom) {
+        //console.log(id, x,y);
+        this.tabPerso[id] = this.game.add.sprite(x, y, "perso");
+        this.tabPerso[id].anchor.set(0.5);
+        this.game.physics.arcade.enable(this.tabPerso[id]);
+        this.tabPerso[id].body.collideWorldBounds = true;
+        
+        this.tabPerso[id].equipe = equipe;
+        this.tabPerso[id].nom = nom;
+        this.tabPerso[id].id = id;
+
+        this.perso = this.tabPerso[JOUEUR.drapeauID];
+        this.creerJoueur();
+        this.peutCommencer = true;
+        console.log(this.tabPerso);
+       
+    },
+    creerJoueur: function () {
+        this.game.camera.follow(this.tabPerso[JOUEUR.drapeauID]);
+    },
+    enleverJoueur: function (id) {
+        //console.log("deconnection:" + this.tabPerso[id].id);
+        this.tabPerso[id].destroy();
+        delete this.tabPerso[id];
+    },
+    majPosition: function (id, x, y) {
+        //console.log("deplacementserveur" + this.tabPerso[id]);
+        this.tabPerso[id].position.x = x;
+        this.tabPerso[id].position.y = y;
+    },
+    assignerEquipe: function (noEquipe, id) {
+        switch (noEquipe) {
+            case "1":
+                this.tabPerso[id].tint = "0X0FFF00";
+                break;
+            case "2":
+                this.tabPerso[id].tint = "0XFFFF00";
+                break;
+            case "3":
+                this.tabPerso[id].tint = "0XF00FF0";
+                break;
+        }
+    },
+    // =====================================
+    // ==== GESTION DE LA CRÉATION DU JEU
+    // =====================================
     creerCarte: function () {
         this.map = this.game.add.tilemap('carte');
         this.map.addTilesetImage('environnement', 'environnement');
@@ -52,46 +102,6 @@ DRAPEAU.Jeu.prototype = {
 
         this.map.setCollision(3, true, this.couches.base);
     },
-    ajouterJoueur: function (id, x, y) {
-        //console.log(id, x,y);
-        this.tabPerso[id] = this.game.add.sprite(x, y, "perso");
-        this.tabPerso[id].anchor.set(0.5);
-        this.game.physics.arcade.enable(this.tabPerso[id]);
-        this.tabPerso[id].body.collideWorldBounds = true;
-
-        this.perso = this.tabPerso[JOUEUR.drapeauID];
-        this.creerJoueur();
-        this.peutCommencer = true;
-       
-    },
-    creerJoueur: function () {
-        this.game.camera.follow(this.tabPerso[JOUEUR.drapeauID]);
-    },
-    enleverJoueur: function (id) {
-        //console.log("deconnection:" + this.tabPerso[id].id);
-        this.tabPerso[id].destroy();
-        delete this.tabPerso[id];
-    },
-    majPosition: function (id, x, y) {
-        //console.log("deplacementserveur" + this.tabPerso[id]);
-        this.tabPerso[id].position.x = x;
-        this.tabPerso[id].position.y = y;
-    },
-    modifierCouleur: function (id) {
-        switch (id) {
-            case 0:
-                this.tabPerso[id].tint = "0X0FFF00";
-                break;
-            case 1:
-                this.tabPerso[id].tint = "0XFFFF00";
-                break;
-            default:
-                this.tabPerso[id].tint = "0X0000FF";
-        }
-    },
-    /**
-     * Fonction servant à la création du jeu
-     */
     create: function () {
         this.signaux = new Phaser.Signal();
         this.signaux.add(this.toucheBase, this);
@@ -109,19 +119,27 @@ DRAPEAU.Jeu.prototype = {
         //Enregistrement des touches de jeu
         this.fleches = this.game.input.keyboard.createCursorKeys();
     },
+
     assignerDrapeau: function (drapeau) {
         console.log(drapeau);
         this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
     },
+
+    // =====================================
+    // ==== GESTION DES INTERACTIONS
+    // =====================================
     collisionAvecFond: function (perso, fond) {
         this.signaux.dispatch(this.perso, this.game);
     },
     toucheBase: function (perso) {
         //console.log("perso", perso);
     },
+
+    // =====================================
+    // ==== UPDATE
+    // =====================================
     /**
-     * Fonction exécuté environ 60X / secondes
-     * Vérifie la direction du curseur lorsqu'un élément est cliqué et l'ajoute comme blocActif2
+     * Fonction exécutée environ 60X / secondes
      */
     update: function () {
         if (this.peutCommencer) {
@@ -149,6 +167,5 @@ DRAPEAU.Jeu.prototype = {
             //this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
         }
         //this.game.debug.cameraInfo(this.game.camera, 32, 32);
-
     }
 }; // Fin Jeu.prototype

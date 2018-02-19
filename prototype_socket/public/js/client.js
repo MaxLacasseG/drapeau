@@ -1,38 +1,37 @@
 "use strict"
-
+/* jshint esversion: 6*/
 var JOUEUR = {};
 JOUEUR.socket = io.connect();
 
 //Requêtes envoyées au serveur
 JOUEUR.nouveauJoueur = function(){
-    JOUEUR.socket.emit('nouveauJoueur');
+    let conteneur = document.querySelector('#jeuConteneur');
+    let equipe = conteneur.dataset.equipe;
+    let nom = conteneur.dataset.nom;
+    console.log('nouveauJoueur:', equipe, nom);
+    JOUEUR.socket.emit('nouveauJoueur', {equipe:equipe, nom:nom});
 };
-JOUEUR.monID = function(){
-    //console.log(JOUEUR.drapeauID);
-    //JOUEUR.socket.emit('monID', JOUEUR.id);
-};
-
 JOUEUR.majPosition = function(id, posX, posY){
     JOUEUR.socket.emit('majPosition', {id:id, x:posX, y:posY});
 };
 
 //=====================================
-//=====================================
 //Écouteurs de signaux du serveur
+//=====================================
 
-
+// Gestion des utilisateurs
 JOUEUR.socket.on('nouveauJoueur', function(joueur){
-    JOUEUR.jeu.state.states.Jeu.ajouterJoueur(joueur.id,joueur.x,joueur.y);
-    JOUEUR.jeu.state.states.Jeu.modifierCouleur(joueur.id);
+    JOUEUR.jeu.state.states.Jeu.ajouterJoueur(joueur.id,joueur.x,joueur.y, joueur.equipe, joueur.nom);
+    JOUEUR.jeu.state.states.Jeu.assignerEquipe(joueur.equipe);
 });
 JOUEUR.socket.on('assignerID',function(id){
     JOUEUR.drapeauID = id;
 });
 
 JOUEUR.socket.on('recupererJoueurs', function(tabJoueurs){
-    for(var i = 0; i < tabJoueurs.length; i++){
-        JOUEUR.jeu.state.states.Jeu.ajouterJoueur(tabJoueurs[i].id, tabJoueurs[i].x, tabJoueurs[i].y);
-        JOUEUR.jeu.state.states.Jeu.modifierCouleur(tabJoueurs[i].id);
+    for(let joueur of tabJoueurs){
+        JOUEUR.jeu.state.states.Jeu.ajouterJoueur(joueur.id, joueur.x, joueur.y, joueur.equipe, joueur.nom);
+        JOUEUR.jeu.state.states.Jeu.assignerEquipe(joueur.equipe, joueur.id);
     }
 });
 
@@ -44,9 +43,8 @@ JOUEUR.socket.on('deplacement', function(joueur){
     JOUEUR.jeu.state.states.Jeu.majPosition(joueur.id, joueur.x, joueur.y);
 });
 
-//GESTION DU DRAPEAU
+// Gestion du drapeau
 JOUEUR.socket.on('assignerDrapeauPos', function(drapeau){
-    console.log(JOUEUR.jeu.state.states.Jeu.assignerDrapeau);
     JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
 });
 

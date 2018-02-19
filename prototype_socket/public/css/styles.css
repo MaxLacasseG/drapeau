@@ -170,6 +170,7 @@ body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > di
   padding: 0.3em;
   flex: 1 1 33%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -181,11 +182,15 @@ body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > di
   border-radius: 0.2em;
   width: 40px;
   height: 40px;
+  margin-bottom: 0.5em;
+  font-size: 2em;
+  border: 2px solid darkolivegreen;
 }
 html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label:hover,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label:hover {
   cursor: pointer;
   background-color: darkslategrey;
+  border: 2px solid darkslategrey;
   color: cornsilk;
 }
 html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input,
@@ -196,6 +201,12 @@ html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > di
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input:checked + label {
   background-color: darkolivegreen;
   color: cornsilk;
+}
+html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div p,
+body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div p {
+  color: darkred;
+  font-size: 1.5em;
+  font-style: italic;
 }
 html .conteneurPrinc .formBloc > section.dr .btnGroupe,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe {

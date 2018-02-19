@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('index', {nbJoueur: app.equipes});
 });
 
 app.post('/jeu', function (req, res) {
@@ -26,11 +26,18 @@ app.post('/jeu', function (req, res) {
 
 server.listen(app.get('port'), function () { // Listens to port 8081
     console.log('Listening on ' + server.address().port);
+    //Enregistre les infos du drapeau;
     app.drapeau = {
         x: 10,
         y: 10,
         equipe: null
-    }
+    };
+    //Enregistre le nombre de personnes par équipe
+    app.equipes = {
+        1:0,
+        2:0,
+        3:0
+    };
 });
 
 //Section de gestion des événements sockets
@@ -39,21 +46,25 @@ app.idDernierJoueur = 0;
 io.on('connection', function (socket) {
     //Assignation du drapeau
     //Gestion des nouveaux utilisateurs
-    socket.on('nouveauJoueur', function () {
+    socket.on('nouveauJoueur', function (data) {
         socket.emit('assignerDrapeauPos', app.drapeau);
         socket.joueur = {
                 id: app.idDernierJoueur++,
                 x: attribuerPosition(600, 600),
-                y: attribuerPosition(600, 600)
+                y: attribuerPosition(600, 600),
+                nom:data.nom,
+                equipe:data.equipe
             },
+        //On augmente le nombre de joueurs par équipe
+        app.equipes[data.equipe]++;    
+        console.log("++ equipes:", app.equipes);  
             //console.log("nouveauJoueur:"+socket.joueur.id);
-            socket.emit('assignerID', socket.joueur.id);
+        socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
 
         //Si un joueur change la position en X
         socket.on('majPosition', function (data) {
-            //console.log('deplacement:' + data.id);
             socket.joueur.x = data.x;
             socket.joueur.y = data.y;
             socket.joueur.id = data.id;
@@ -63,7 +74,9 @@ io.on('connection', function (socket) {
 
         //Gestion de la deconnection 
         socket.on('disconnect', function () {
+            app.equipes[socket.joueur.equipe]--;
             console.log("deconnection:" + socket.joueur.id);
+            console.log("-- equipes:", app.equipes);
             io.emit('enleverJoueur', socket.joueur.id);
         });
     });
