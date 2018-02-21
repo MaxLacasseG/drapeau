@@ -28,8 +28,8 @@ server.listen(app.get('port'), function () { // Listens to port 8081
     console.log('Listening on ' + server.address().port);
     //Enregistre les infos du drapeau;
     app.drapeau = {
-        x: 10,
-        y: 10,
+        x: 600,
+        y: 600,
         equipe: null
     };
     //Enregistre le nombre de personnes par équipe
@@ -71,6 +71,10 @@ io.on('connection', function (socket) {
             socket.broadcast.emit('deplacement', socket.joueur);
         });
 
+        socket.on('attraperDrapeau', function(data){
+            console.log('joueur '+ data.id +' a attrapé le drapeau');
+            socket.emit('majDrapeau', data.id);
+        })
 
         //Gestion de la deconnection 
         socket.on('disconnect', function () {

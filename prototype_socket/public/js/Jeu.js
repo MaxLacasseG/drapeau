@@ -15,6 +15,7 @@ DRAPEAU.Jeu = function () {
     var peutCommencer = false;
     var signaux;
     var drapeau;
+    var dansSaBase = false;
 
 };
 
@@ -27,7 +28,9 @@ DRAPEAU.Jeu.prototype = {
             y: 0,
             equipe: null,
             joueur: null
-        }
+        };
+        this.dansSaBase = false;
+
 
     },
     preload: function () {
@@ -46,7 +49,7 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso[id].anchor.set(0.5);
         this.game.physics.arcade.enable(this.tabPerso[id]);
         this.tabPerso[id].body.collideWorldBounds = true;
-        
+
         this.tabPerso[id].equipe = equipe;
         this.tabPerso[id].nom = nom;
         this.tabPerso[id].id = id;
@@ -55,7 +58,7 @@ DRAPEAU.Jeu.prototype = {
         this.creerJoueur();
         this.peutCommencer = true;
         console.log(this.tabPerso);
-       
+
     },
     creerJoueur: function () {
         this.game.camera.follow(this.tabPerso[JOUEUR.drapeauID]);
@@ -98,9 +101,10 @@ DRAPEAU.Jeu.prototype = {
         this.couches.murs.resizeWorld();
         this.couches.base.resizeWorld();
 
+        //Crée les collisions avec le jeu
         this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
 
-        this.map.setCollision(195, true, this.couches.base);
+        //this.map.setCollision(195, true, this.couches.base);
     },
     create: function () {
         this.signaux = new Phaser.Signal();
@@ -121,8 +125,9 @@ DRAPEAU.Jeu.prototype = {
     },
 
     assignerDrapeau: function (drapeau) {
-        console.log(drapeau);
         this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
+        this.game.physics.arcade.enable(this.drapeau);
+        this.drapeau.body.immovable = true;
     },
 
     // =====================================
@@ -132,9 +137,25 @@ DRAPEAU.Jeu.prototype = {
         this.signaux.dispatch(this.perso, this.game);
     },
     toucheBase: function (perso, fond) {
-       console.log("base");
+        if(this.perso.drapeau == true){
+            this.deposeDrapeau();
+        }
+        console.log("base");
     },
-
+    prendDrapeau : function(perso, drapeau){
+        this.perso.drapeau = true;
+        this.drapeau.visible = false;
+        this.drapeau.body.enable = false;
+        JOUEUR.attraperDrapeau(perso.id);
+        console.log(perso.id);
+    },
+    deposeDrapeau:function(){
+        let x = this.perso.position.x;
+        let y = this.perso.position.y;
+        this.drapeau.position = {x,y};
+        this.drapeau.visible = true;
+        this.perso.drapeau = false;
+    },
     // =====================================
     // ==== UPDATE
     // =====================================
@@ -143,8 +164,22 @@ DRAPEAU.Jeu.prototype = {
      */
     update: function () {
         if (this.peutCommencer) {
+            //Empêche le joueur de traverser les murs
             this.game.physics.arcade.collide(this.perso, this.couches.murs);
-            this.game.physics.arcade.collide(this.perso, this.couches.base, this.toucheBase, null, this);
+
+            this.game.physics.arcade.collide(this.perso, this.drapeau, this.prendDrapeau, null, this);
+
+            //Vérifie si le joueur entre dans sa base.
+            if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.couches.base) && !this.dansSaBase) {
+                    this.dansSaBase = true;
+                    this.toucheBase();
+            }
+            //Vérifie si le joueur sort de la base
+            if(this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.couches.base)===null && this.dansSaBase) {
+                this.dansSaBase = false;
+            };
+
+            //Gestion des déplacements du joueur
             this.perso.body.velocity.x = 0;
             this.perso.body.velocity.y = 0;
 
@@ -164,8 +199,6 @@ DRAPEAU.Jeu.prototype = {
                 this.perso.body.velocity.y = 350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
-            //this.game.debug.body(this.tabPerso[JOUEUR.drapeauID]);
-        }
-        //this.game.debug.cameraInfo(this.game.camera, 32, 32);
-    }
+        }//Fin if
+    }//Fin update
 }; // Fin Jeu.prototype

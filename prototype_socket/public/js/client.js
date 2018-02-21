@@ -15,6 +15,14 @@ JOUEUR.majPosition = function(id, posX, posY){
     JOUEUR.socket.emit('majPosition', {id:id, x:posX, y:posY});
 };
 
+JOUEUR.attraperDrapeau = function(id){
+    JOUEUR.socket.emit('attraperDrapeau', {id:id});
+}
+
+JOUEUR.deposerDrapeau = function(id, equipe, posX, posY){
+    JOUEUR.socket.emit('deposerDrapeau', {id:id, equipe:equipe, posX:posX, posY:posY});
+}
+
 //=====================================
 //Écouteurs de signaux du serveur
 //=====================================
