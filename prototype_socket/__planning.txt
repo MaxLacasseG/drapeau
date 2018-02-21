@@ -1,0 +1,36 @@
+=======================
+GESTION DU DRAPEAU
++++++++++++++++++++++++
+[ ] Détecter sa propre base
+[ ] Détecter la base ennemi
+[ ] Synchroniser les infos du drapeau
+[ ] Voler le drapeau
+
+=======================
+GESTION DES POINTS
++++++++++++++++++++++++
+[ ] Comptabilité des points
+[ ] Ajoute des points à chaques 15 sec
+[ ] Synchroniser les points
+
+=======================
+GESTION DU UTILISATEURS
++++++++++++++++++++++++
+[ ] Ajout de tir
+[ ] Destruction d'un joueur
+[ ] Respawn
+[ ] Synchronisation des tirs
+[ ] Synchroniser les animations
+
+=======================
+GESTION DU UTILISATEURS
++++++++++++++++++++++++
+[ ] Boite de messages indiquant les infos
+[ ] Bloquer le nombre de joueurs max par équipe
+[ ] Validation du formulaire
+
+=======================
+DESIGN & INTERFACE
++++++++++++++++++++++++
+[ ] Boucliers
+[ ] Animations interfaces
