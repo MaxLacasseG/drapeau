@@ -1,8 +1,9 @@
-var express = require('express');
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io').listen(server);
-var bodyParser = require('body-parser');
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io').listen(server);
+const bodyParser = require('body-parser');
+let temps;
 //var cookieParser = require(); À implémenter
 app.set('port', (process.env.PORT || 8081));
 
@@ -10,10 +11,15 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 
+
+//=============================
+//          ROUTES 
+// ============================
 app.get('/', function (req, res) {
     res.render('index', {nbJoueur: app.equipes});
 });
 
+// DÉMARRAGE DU JEU
 app.post('/jeu', function (req, res) {
     data = {
         equipe: req.body.equipe,
@@ -24,8 +30,12 @@ app.post('/jeu', function (req, res) {
     });
 });
 
-server.listen(app.get('port'), function () { // Listens to port 8081
+// =========================
+// DÉMARRAGE DU SERVEUR
+//==========================
+server.listen(app.get('port'), function () { 
     console.log('Listening on ' + server.address().port);
+    const temps = process.hrtime();
     //Enregistre les infos du drapeau;
     app.drapeau = {
         x: 600,
@@ -39,7 +49,6 @@ server.listen(app.get('port'), function () { // Listens to port 8081
         3:0
     };
 });
-
 //Section de gestion des événements sockets
 //Eve. lancée lors d'une connexion au serveur
 app.idDernierJoueur = 0;
