@@ -38,6 +38,7 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
         this.game.load.image('drapeau', 'medias/img/gem-1.png');
+        this.game.load.spritesheet('persoMarche', 'medias/img/hero-walk-side.png', 32, 32);
     },
 
     // =========================
@@ -45,9 +46,11 @@ DRAPEAU.Jeu.prototype = {
     // =========================
     ajouterJoueur: function (id, x, y, equipe, nom) {
         //console.log(id, x,y);
-        this.tabPerso[id] = this.game.add.sprite(x, y, "perso");
+        this.tabPerso[id] = this.game.add.sprite(x, y, "persoMarche");
         this.tabPerso[id].anchor.set(0.5);
         this.game.physics.arcade.enable(this.tabPerso[id]);
+        this.tabPerso[id].animations.add('marche');
+        this.tabPerso[id].animations.add('repos', [1]);
         this.tabPerso[id].body.collideWorldBounds = true;
 
         this.tabPerso[id].equipe = equipe;
@@ -100,7 +103,7 @@ DRAPEAU.Jeu.prototype = {
         this.couches.fond.resizeWorld();
         this.couches.murs.resizeWorld();
         this.couches.base.resizeWorld();
-
+        
         //Crée les collisions avec le jeu
         this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
 
@@ -171,7 +174,7 @@ DRAPEAU.Jeu.prototype = {
 
             //Vérifie si le joueur entre dans sa base.
             if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.couches.base) && !this.dansSaBase) {
-                    this.dansSaBase = true;
+                this.dansSaBase = true;
                     this.toucheBase();
             }
             //Vérifie si le joueur sort de la base
@@ -182,12 +185,17 @@ DRAPEAU.Jeu.prototype = {
             //Gestion des déplacements du joueur
             this.perso.body.velocity.x = 0;
             this.perso.body.velocity.y = 0;
-
+            let sens = 1;
+            
             if (this.fleches.left.isDown) {
+                this.perso.scale.x = -1;
+                this.perso.animations.play('marche',30,true);
                 this.perso.body.velocity.x = -350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
             if (this.fleches.right.isDown) {
+                this.perso.scale.x = 1;
+                this.perso.animations.play('marche',30,true);
                 this.perso.body.velocity.x = 350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
@@ -199,6 +207,8 @@ DRAPEAU.Jeu.prototype = {
                 this.perso.body.velocity.y = 350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
             }
+            //this.perso.animations.play('repos');
+            
         }//Fin if
     }//Fin update
 }; // Fin Jeu.prototype
