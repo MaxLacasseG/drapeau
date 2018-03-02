@@ -1,7 +1,7 @@
 =======================
 GESTION DU DRAPEAU
 +++++++++++++++++++++++
-[ ] Détecter sa propre base
+[X] Détecter sa propre base
 [ ] Détecter la base ennemi
 [ ] Synchroniser les infos du drapeau
 [ ] Voler le drapeau

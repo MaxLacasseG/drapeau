@@ -38,7 +38,7 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
         this.game.load.image('drapeau', 'medias/img/gem-1.png');
-        this.game.load.spritesheet('persoMarche', 'medias/img/hero-walk-side.png', 32, 32);
+        this.game.load.spritesheet('persoMarche', 'medias/img/persoSpritesheet.png', 32, 32);
     },
 
     // =========================
@@ -49,7 +49,9 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso[id] = this.game.add.sprite(x, y, "persoMarche");
         this.tabPerso[id].anchor.set(0.5);
         this.game.physics.arcade.enable(this.tabPerso[id]);
-        this.tabPerso[id].animations.add('marche');
+        this.tabPerso[id].animations.add('marcheCote', [0,1,2,3,4,5]);
+        this.tabPerso[id].animations.add('marcheBas', [6,7,8,9,10,11]);
+        this.tabPerso[id].animations.add('marcheHaut', [12,13,14,15,16,17]);
         this.tabPerso[id].animations.add('repos', [1]);
         this.tabPerso[id].body.collideWorldBounds = true;
 
@@ -189,25 +191,26 @@ DRAPEAU.Jeu.prototype = {
             
             if (this.fleches.left.isDown) {
                 this.perso.scale.x = -1;
-                this.perso.animations.play('marche',30,true);
+                this.perso.animations.play('marcheCote',30,true);
                 this.perso.body.velocity.x = -350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
-            }
-            if (this.fleches.right.isDown) {
+            }else if (this.fleches.right.isDown) {
                 this.perso.scale.x = 1;
-                this.perso.animations.play('marche',30,true);
+                this.perso.animations.play('marcheCote',30,true);
                 this.perso.body.velocity.x = 350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
-            }
-            if (this.fleches.up.isDown) {
+            }else if (this.fleches.up.isDown) {
+                this.perso.animations.play('marcheHaut',30,true);
                 this.perso.body.velocity.y = -350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
-            }
-            if (this.fleches.down.isDown) {
+            }else if (this.fleches.down.isDown) {
+                this.perso.animations.play('marcheBas',30,true);
                 this.perso.body.velocity.y = 350;
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
+            }else{
+                this.perso.animations.stop();
             }
-            //this.perso.animations.play('repos');
+            
             
         }//Fin if
     }//Fin update
