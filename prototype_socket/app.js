@@ -77,6 +77,8 @@ io.on('connection', function (socket) {
             socket.joueur.x = data.x;
             socket.joueur.y = data.y;
             socket.joueur.id = data.id;
+            socket.joueur.frame = data.frame;
+            socket.joueur.sens = data.sens;
             socket.broadcast.emit('deplacement', socket.joueur);
         });
 

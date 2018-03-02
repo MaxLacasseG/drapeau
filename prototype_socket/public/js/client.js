@@ -11,8 +11,8 @@ JOUEUR.nouveauJoueur = function(){
     console.log('nouveauJoueur:', equipe, nom);
     JOUEUR.socket.emit('nouveauJoueur', {equipe:equipe, nom:nom});
 };
-JOUEUR.majPosition = function(id, posX, posY){
-    JOUEUR.socket.emit('majPosition', {id:id, x:posX, y:posY});
+JOUEUR.majPosition = function(id, posX, posY, frame, sens){
+    JOUEUR.socket.emit('majPosition', {id:id, x:posX, y:posY, frame:frame, sens:sens});
 };
 
 JOUEUR.attraperDrapeau = function(id){
@@ -30,7 +30,6 @@ JOUEUR.deposerDrapeau = function(id, equipe, posX, posY){
 // Gestion des utilisateurs
 JOUEUR.socket.on('nouveauJoueur', function(joueur){
     JOUEUR.jeu.state.states.Jeu.ajouterJoueur(joueur.id,joueur.x,joueur.y, joueur.equipe, joueur.nom);
-    JOUEUR.jeu.state.states.Jeu.assignerEquipe(joueur.equipe);
 });
 JOUEUR.socket.on('assignerID',function(id){
     JOUEUR.drapeauID = id;
@@ -39,7 +38,6 @@ JOUEUR.socket.on('assignerID',function(id){
 JOUEUR.socket.on('recupererJoueurs', function(tabJoueurs){
     for(let joueur of tabJoueurs){
         JOUEUR.jeu.state.states.Jeu.ajouterJoueur(joueur.id, joueur.x, joueur.y, joueur.equipe, joueur.nom);
-        JOUEUR.jeu.state.states.Jeu.assignerEquipe(joueur.equipe, joueur.id);
     }
 });
 
@@ -48,7 +46,7 @@ JOUEUR.socket.on('enleverJoueur', function(joueur){
 });
 
 JOUEUR.socket.on('deplacement', function(joueur){
-    JOUEUR.jeu.state.states.Jeu.majPosition(joueur.id, joueur.x, joueur.y);
+    JOUEUR.jeu.state.states.Jeu.majPosition(joueur.id, joueur.x, joueur.y, joueur.frame, joueur.sens);
 });
 
 // Gestion du drapeau

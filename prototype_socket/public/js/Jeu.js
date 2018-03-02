@@ -21,6 +21,11 @@ DRAPEAU.Jeu = function () {
 };
 
 DRAPEAU.Jeu.prototype = {
+    /**
+     * Fonction d'initialisation de Phaser, appelé à la première lecture du script
+     * Initialise le tableau de personnage
+     * Initialise les valeurs du drapeau
+     */
     init: function () {
         this.tabPerso = {};
         this.game.stage.disableVisibilityChange = true;
@@ -30,71 +35,110 @@ DRAPEAU.Jeu.prototype = {
             equipe: null,
             joueur: null
         };
-        this.dansSaBase = false;
-
-
     },
+    /**
+     * Fonction de chargement des médias
+     */
     preload: function () {
         this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
         this.game.load.image('drapeau', 'medias/img/gem-1.png');
         this.game.load.spritesheet('persoMarche', 'medias/img/persoSpritesheet.png', 32, 32);
+        this.game.load.spritesheet('taupeMarche', 'medias/img/taupeSpritesheet.png', 32, 32);
+        this.game.load.spritesheet('arbreMarche', 'medias/img/arbreSpritesheet.png', 32, 32);
         this.game.load.spritesheet('mort', 'medias/img/enemy-death.png', 32, 32);
     },
 
     // =========================
     // ==== GESTION JOUEUR
-    // =========================
+    /**
+     * Fonction servant à ajouter un joueur à la partie
+     * Appelée par une requête serveur lors de la mise à jour du tableau de joueurs
+     * Crée un personnage, ajoute ses animations et sa physique
+     * L'ajoute au tableau de joueur
+     * Assigne le joueur principal
+     * 
+     * @param int id 
+     * @param int x 
+     * @param int y 
+     * @param int equipe 
+     * @param string nom 
+     */
     ajouterJoueur: function (id, x, y, equipe, nom) {
-        //console.log(id, x,y);
-        this.tabPerso[id] = this.game.add.sprite(x, y, "persoMarche");
+        switch (equipe) {
+            case "1":
+                this.tabPerso[id] = this.game.add.sprite(x, y, "persoMarche");
+                this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3, 4, 5]);
+                this.tabPerso[id].animations.add('marcheBas', [6, 7, 8, 9, 10, 11]);
+                this.tabPerso[id].animations.add('marcheHaut', [12, 13, 14, 15, 16, 17]);
+                this.tabPerso[id].animations.add('repos', [1]);
+                break;
+            case "2":
+                this.tabPerso[id] = this.game.add.sprite(x, y, "taupeMarche");
+                this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3]);
+                this.tabPerso[id].animations.add('marcheBas', [4,5,6,7]);
+                this.tabPerso[id].animations.add('marcheHaut', [8,9,10,11]);
+                this.tabPerso[id].animations.add('repos', [1]);
+                break;
+            case "3":
+                this.tabPerso[id] = this.game.add.sprite(x, y, "arbreMarche");
+                this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3]);
+                this.tabPerso[id].animations.add('marcheBas', [4,5,6,7]);
+                this.tabPerso[id].animations.add('marcheHaut', [8,9,10,11]);
+                this.tabPerso[id].animations.add('repos', [1]);
+                break;
+        }
+       
         this.tabPerso[id].anchor.set(0.5);
         this.game.physics.arcade.enable(this.tabPerso[id]);
-        this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3, 4, 5]);
-        this.tabPerso[id].animations.add('marcheBas', [6, 7, 8, 9, 10, 11]);
-        this.tabPerso[id].animations.add('marcheHaut', [12, 13, 14, 15, 16, 17]);
-        this.tabPerso[id].animations.add('repos', [1]);
+       
         this.tabPerso[id].body.collideWorldBounds = true;
 
         this.tabPerso[id].equipe = equipe;
         this.tabPerso[id].nom = nom;
         this.tabPerso[id].id = id;
-
-        this.perso = this.tabPerso[JOUEUR.drapeauID];
         this.creerJoueur();
-        this.peutCommencer = true;
-        console.log(this.tabPerso);
-
     },
+    /**
+     * Fonction servant à assigner le joueur local
+     * Permet à la caméra de suivre
+     * Démarre la partie dans le update
+     */
     creerJoueur: function () {
+        this.perso = this.tabPerso[JOUEUR.drapeauID];
         this.game.camera.follow(this.tabPerso[JOUEUR.drapeauID]);
+        this.peutCommencer = true;
     },
+    /**
+     * Enlève un joueur du tableau de personnage à la déconnection
+     * Appelé par une requête serveur
+     * 
+     * @param {any} id 
+     */
     enleverJoueur: function (id) {
         //console.log("deconnection:" + this.tabPerso[id].id);
         this.tabPerso[id].destroy();
         delete this.tabPerso[id];
     },
-    majPosition: function (id, x, y) {
-        //console.log("deplacementserveur" + this.tabPerso[id]);
+    /**
+     * Fonction servant à mettre à jour la position d'un joueur dans le tableau de joueur
+     * 
+     * @param int id 
+     * @param int x 
+     * @param int y 
+     */
+    majPosition: function (id, x, y, frame,sens) {
         this.tabPerso[id].position.x = x;
         this.tabPerso[id].position.y = y;
-    },
-    assignerEquipe: function (noEquipe, id) {
-        switch (noEquipe) {
-            case "1":
-                this.tabPerso[id].tint = "0X0FFF00";
-                break;
-            case "2":
-                this.tabPerso[id].tint = "0XFFFF00";
-                break;
-            case "3":
-                this.tabPerso[id].tint = "0XF00FF0";
-                break;
-        }
+        this.tabPerso[id].frame = frame;
+        this.tabPerso[id].scale.x = sens;
     },
     revivre: function (id) {
         if (!this.estMort) {
+            if(this.tabPerso[id].drapeau){
+                this.deposeDrapeau();
+            }
             this.estMort = true;
             console.log("revivre", id);
             this.tabPerso[id].visible = false;
@@ -218,20 +262,20 @@ DRAPEAU.Jeu.prototype = {
                 this.perso.scale.x = -1;
                 this.perso.animations.play('marcheCote', 30, true);
                 this.perso.body.velocity.x = -350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.right.isDown) {
                 this.perso.scale.x = 1;
                 this.perso.animations.play('marcheCote', 30, true);
                 this.perso.body.velocity.x = 350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y,this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.up.isDown) {
                 this.perso.animations.play('marcheHaut', 30, true);
                 this.perso.body.velocity.y = -350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y,this.perso.frame,this.perso.scale.x);
             } else if (this.fleches.down.isDown) {
                 this.perso.animations.play('marcheBas', 30, true);
                 this.perso.body.velocity.y = 350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y,this.perso.frame,this.perso.scale.x);
             } else {
                 this.perso.animations.stop();
             }
