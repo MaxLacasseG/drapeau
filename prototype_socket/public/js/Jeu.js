@@ -17,6 +17,9 @@ DRAPEAU.Jeu = function () {
     var drapeau;
     var dansSaBase = false;
     var estMort = false;
+    var projectiles;
+    var ratioTir;
+    var prochainTir;
 
 };
 
@@ -35,6 +38,8 @@ DRAPEAU.Jeu.prototype = {
             equipe: null,
             joueur: null
         };
+        this.ratioTir = 200;
+        this.prochainTir = 0;
     },
     /**
      * Fonction de chargement des médias
@@ -48,8 +53,32 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.spritesheet('taupeMarche', 'medias/img/taupeSpritesheet.png', 32, 32);
         this.game.load.spritesheet('arbreMarche', 'medias/img/arbreSpritesheet.png', 32, 32);
         this.game.load.spritesheet('mort', 'medias/img/enemy-death.png', 32, 32);
+        this.game.load.image('projectile', 'medias/img/gem-1.png');
     },
+    create: function () {
+        this.signaux = new Phaser.Signal();
+        this.signaux.add(this.toucheBase, this);
 
+        //Démarrage du système de physique
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.creerCarte();
+        this.game.world.setBounds(0, 0, 1600, 1600);
+
+        this.projectiles = this.game.add.group();
+        this.projectiles.enableBody = true;
+        this.projectiles.physicsBodyType = Phaser.Physics.ARCADE;
+        this.projectiles.createMultiple(15, 'projectile');
+        this.projectiles.setAll('checkWorldBounds', true);
+        this.projectiles.setAll('outOfBoundsKill', true);
+
+        //Ajout du personnage    
+        //Message au serveur
+
+        JOUEUR.nouveauJoueur();
+
+        //Enregistrement des touches de jeu
+        this.fleches = this.game.input.keyboard.createCursorKeys();
+    },
     // =========================
     // ==== GESTION JOUEUR
     /**
@@ -77,22 +106,22 @@ DRAPEAU.Jeu.prototype = {
             case "2":
                 this.tabPerso[id] = this.game.add.sprite(x, y, "taupeMarche");
                 this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3]);
-                this.tabPerso[id].animations.add('marcheBas', [4,5,6,7]);
-                this.tabPerso[id].animations.add('marcheHaut', [8,9,10,11]);
+                this.tabPerso[id].animations.add('marcheBas', [4, 5, 6, 7]);
+                this.tabPerso[id].animations.add('marcheHaut', [8, 9, 10, 11]);
                 this.tabPerso[id].animations.add('repos', [1]);
                 break;
             case "3":
                 this.tabPerso[id] = this.game.add.sprite(x, y, "arbreMarche");
                 this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3]);
-                this.tabPerso[id].animations.add('marcheBas', [4,5,6,7]);
-                this.tabPerso[id].animations.add('marcheHaut', [8,9,10,11]);
+                this.tabPerso[id].animations.add('marcheBas', [4, 5, 6, 7]);
+                this.tabPerso[id].animations.add('marcheHaut', [8, 9, 10, 11]);
                 this.tabPerso[id].animations.add('repos', [1]);
                 break;
         }
-       
+
         this.tabPerso[id].anchor.set(0.5);
         this.game.physics.arcade.enable(this.tabPerso[id]);
-       
+
         this.tabPerso[id].body.collideWorldBounds = true;
 
         this.tabPerso[id].equipe = equipe;
@@ -128,7 +157,7 @@ DRAPEAU.Jeu.prototype = {
      * @param int x 
      * @param int y 
      */
-    majPosition: function (id, x, y, frame,sens) {
+    majPosition: function (id, x, y, frame, sens) {
         this.tabPerso[id].position.x = x;
         this.tabPerso[id].position.y = y;
         this.tabPerso[id].frame = frame;
@@ -136,7 +165,7 @@ DRAPEAU.Jeu.prototype = {
     },
     revivre: function (id) {
         if (!this.estMort) {
-            if(this.tabPerso[id].drapeau){
+            if (this.tabPerso[id].drapeau) {
                 this.deposeDrapeau();
             }
             this.estMort = true;
@@ -177,23 +206,7 @@ DRAPEAU.Jeu.prototype = {
 
         //this.map.setCollision(195, true, this.couches.base);
     },
-    create: function () {
-        this.signaux = new Phaser.Signal();
-        this.signaux.add(this.toucheBase, this);
 
-        //Démarrage du système de physique
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.creerCarte();
-        this.game.world.setBounds(0, 0, 1600, 1600);
-
-        //Ajout du personnage    
-        //Message au serveur
-
-        JOUEUR.nouveauJoueur();
-
-        //Enregistrement des touches de jeu
-        this.fleches = this.game.input.keyboard.createCursorKeys();
-    },
 
     assignerDrapeau: function (drapeau) {
         this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
@@ -230,6 +243,22 @@ DRAPEAU.Jeu.prototype = {
         this.drapeau.visible = true;
         this.perso.drapeau = false;
     },
+    tirProjectile: function () {
+        if (this.game.time.now > this.prochainTir && this.projectiles.countDead() > 0) {
+            
+            this.prochainTir = this.game.time.now + this.ratioTir;
+
+            var projectile = this.projectiles.getFirstDead();
+
+            projectile.reset(this.perso.x, this.perso.y);
+
+            this.game.physics.arcade.moveToPointer(projectile, 300);
+            this.game.time.events.add(750, function(){
+                projectile.kill();
+            }, this)
+        }
+
+    },
     // =====================================
     // ==== UPDATE
     // =====================================
@@ -253,6 +282,11 @@ DRAPEAU.Jeu.prototype = {
                 this.dansSaBase = false;
             };
 
+            // Gestion du tir
+            if (this.game.input.activePointer.isDown) {
+                this.tirProjectile();
+            }
+
             //Gestion des déplacements du joueur
             this.perso.body.velocity.x = 0;
             this.perso.body.velocity.y = 0;
@@ -267,15 +301,15 @@ DRAPEAU.Jeu.prototype = {
                 this.perso.scale.x = 1;
                 this.perso.animations.play('marcheCote', 30, true);
                 this.perso.body.velocity.x = 350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y,this.perso.frame, this.perso.scale.x);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.up.isDown) {
                 this.perso.animations.play('marcheHaut', 30, true);
                 this.perso.body.velocity.y = -350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y,this.perso.frame,this.perso.scale.x);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.down.isDown) {
                 this.perso.animations.play('marcheBas', 30, true);
                 this.perso.body.velocity.y = 350;
-                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y,this.perso.frame,this.perso.scale.x);
+                JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else {
                 this.perso.animations.stop();
             }
