@@ -269,15 +269,10 @@ DRAPEAU.Jeu.prototype = {
         let projectile = this.projectiles.getFirstDead();
         projectile.reset(this.tabPerso[projectileInfo.id].x, this.tabPerso[projectileInfo.id].y);
 
-        let projectileAnim = this.game.add.tween(projectile).to({
-            x: projectileInfo.pointerX,
-            y: projectileInfo.pointerY
-        }, 750, Phaser.Easing.Linear.In, true);
-
-        projectileAnim.onComplete.add(function(target, tween){
-            target.destroy();
+        this.game.physics.arcade.moveToXY(projectile,projectileInfo.pointerX, projectileInfo.pointerY,300);
+        this.game.time.events.add(750, function () {
+            projectile.kill();
         }, this);
-
     },
     // =====================================
     // ==== UPDATE
