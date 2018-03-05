@@ -37,11 +37,15 @@ server.listen(app.get('port'), function () {
     console.log('Listening on ' + server.address().port);
     const temps = process.hrtime();
     //Enregistre les infos du drapeau;
+    app.positionsDrapeau = [{x:165, y:70},{x:395, y:625},{x:1365, y:150},{x:1410, y:550},{x:850, y:1105},{x:460, y:1510},{x:505, y:1250}];
+    let positionInitiale = app.positionsDrapeau[Math.floor(Math.random() * app.positionsDrapeau.length)];
+    
     app.drapeau = {
-        x: 600,
-        y: 600,
-        equipe: null
+        x: positionInitiale.x,
+        y: positionInitiale.y,
+        equipe: null,
     };
+  
     //Enregistre le nombre de personnes par équipe
     app.equipes = {
         1:0,
@@ -49,14 +53,19 @@ server.listen(app.get('port'), function () {
         3:0
     };
 });
+
+
 //Section de gestion des événements sockets
 //Eve. lancée lors d'une connexion au serveur
 app.idDernierJoueur = 0;
+
 io.on('connection', function (socket) {
     //Assignation du drapeau
     //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur', function (data) {
+        //On place le drapeau pour la première fois
         socket.emit('assignerDrapeauPos', app.drapeau);
+
         socket.joueur = {
                 id: app.idDernierJoueur++,
                 x: attribuerPosition(600, 600),
@@ -64,10 +73,12 @@ io.on('connection', function (socket) {
                 nom:data.nom,
                 equipe:data.equipe
             },
+
         //On augmente le nombre de joueurs par équipe
         app.equipes[data.equipe]++;    
         console.log("++ equipes:", app.equipes);  
-            //console.log("nouveauJoueur:"+socket.joueur.id);
+      
+        
         socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
@@ -82,9 +93,16 @@ io.on('connection', function (socket) {
             socket.broadcast.emit('deplacement', socket.joueur);
         });
 
+        // GESTION DRAPEAU
+        //=================================
         socket.on('attraperDrapeau', function(data){
-            console.log('joueur '+ data.id +' a attrapé le drapeau');
-            socket.emit('majDrapeau', data.id);
+            console.log('joueur '+ data.id +' a attrapé le drapeau. Il appartient à l\'equipe'+data.equipe);
+            io.emit('drapeauEnDeplacement', data.id);
+        })
+
+        socket.on('deposerDrapeau', function(data){
+            console.log('joueur '+ data.id +' a attrapé le drapeau. Il appartient à l\'equipe'+data.equipe);
+            io.emit('drapeauEnDeplacement', data);
         })
 
         //Gestion de la deconnection 

@@ -11,17 +11,40 @@ JOUEUR.nouveauJoueur = function(){
     console.log('nouveauJoueur:', equipe, nom);
     JOUEUR.socket.emit('nouveauJoueur', {equipe:equipe, nom:nom});
 };
+
+//Indique au serveur un changement de position
 JOUEUR.majPosition = function(id, posX, posY, frame, sens){
     JOUEUR.socket.emit('majPosition', {id:id, x:posX, y:posY, frame:frame, sens:sens});
 };
 
-JOUEUR.attraperDrapeau = function(id){
-    JOUEUR.socket.emit('attraperDrapeau', {id:id});
+
+// GESTION DU DRAPEAU
+//=====================================================
+JOUEUR.socket.on('assignerDrapeauPos', function(drapeau){
+    JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
+});
+//Indique au serveur lorsque le joueur attrape un drapeau
+JOUEUR.attraperDrapeau = function(id, equipe){
+    JOUEUR.socket.emit('attraperDrapeau', {id:id, equipe:equipe});
 }
 
-JOUEUR.deposerDrapeau = function(id, equipe, posX, posY){
-    JOUEUR.socket.emit('deposerDrapeau', {id:id, equipe:equipe, posX:posX, posY:posY});
+//Retour du serveur
+JOUEUR.socket.on('drapeauEnDeplacement', function(id){
+    console.log(id + " a le drapeau");
+    JOUEUR.jeu.state.states.Jeu.drapeauEnDeplacement();
+})
+
+//Indique au serveur lorsque le joueur attrape un drapeau
+JOUEUR.deposerDrapeau = function(id, posX, posY, equipe){
+    JOUEUR.socket.emit('deposerDrapeau', {id:id, posX:posX, posY:posY, equipe:equipe});
 }
+
+//Retour du serveur
+JOUEUR.socket.on('majDrapeau', function(data){
+    console.log(data);
+    console.log(data.id + " a déposé le drapeau");
+    JOUEUR.jeu.state.states.Jeu.majPositionDrapeau(data);
+})
 
 //=====================================
 //Écouteurs de signaux du serveur
@@ -49,16 +72,3 @@ JOUEUR.socket.on('deplacement', function(joueur){
     JOUEUR.jeu.state.states.Jeu.majPosition(joueur.id, joueur.x, joueur.y, joueur.frame, joueur.sens);
 });
 
-// Gestion du drapeau
-JOUEUR.socket.on('assignerDrapeauPos', function(drapeau){
-    JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
-});
-
-JOUEUR.socket.on('attribuerDrapeau', function(drapeau, id){
-    console.log('drapeau attrapé');
-});
-
-JOUEUR.socket.on('majDrapeauPos', function(drapeau){
-    console.log(JOUEUR.jeu.state.states.Jeu.assignerDrapeau);
-    JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
-});

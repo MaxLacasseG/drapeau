@@ -166,7 +166,8 @@ DRAPEAU.Jeu.prototype = {
     revivre: function (id) {
         if (!this.estMort) {
             if (this.tabPerso[id].drapeau) {
-                this.deposeDrapeau();
+                this.deposerDrapeau();
+                this.drapeau.body.enable = true;
             }
             this.estMort = true;
             console.log("revivre", id);
@@ -207,7 +208,6 @@ DRAPEAU.Jeu.prototype = {
         //this.map.setCollision(195, true, this.couches.base);
     },
 
-
     assignerDrapeau: function (drapeau) {
         this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
         this.game.physics.arcade.enable(this.drapeau);
@@ -222,42 +222,43 @@ DRAPEAU.Jeu.prototype = {
     },
     toucheBase: function (perso, fond) {
         if (this.perso.drapeau == true) {
-            this.deposeDrapeau();
         }
         console.log("base");
     },
     prendDrapeau: function (perso, drapeau) {
-        this.perso.drapeau = true;
+        if(!this.perso.possedeDrapeau){
+            this.perso.possedeDrapeau = true;
+            JOUEUR.attraperDrapeau(perso.id, perso.equipe);
+        }
+    },
+    drapeauEnDeplacement(){
+        console.log(this.drapeau.visible);
         this.drapeau.visible = false;
         this.drapeau.body.enable = false;
-        JOUEUR.attraperDrapeau(perso.id);
-        console.log(perso.id);
     },
-    deposeDrapeau: function () {
-        let x = this.perso.position.x;
-        let y = this.perso.position.y;
-        this.drapeau.position = {
-            x,
-            y
-        };
+    deposeDrapeau(){
+        this.perso.possedeDrapeau = false;
+        JOUEUR.deposerDrapeau(this.perso.id, this.perso.x, this.perso.y, this.perso.equipe);
+    },
+    majPositionDrapeau(data){
+        this.drapeau.x = data.posX;
+        this.drapeau.y = data.posY;
         this.drapeau.visible = true;
-        this.perso.drapeau = false;
+        this.game.time.events.add(100, function(){
+            this.drapeau.body.enable = true;
+        }, this);
     },
     tirProjectile: function () {
-        if (this.game.time.now > this.prochainTir && this.projectiles.countDead() > 0) {
-            
+        if (this.game.time.now > this.prochainTir && this.projectiles.countDead() > 0) {      
             this.prochainTir = this.game.time.now + this.ratioTir;
-
             var projectile = this.projectiles.getFirstDead();
-
             projectile.reset(this.perso.x, this.perso.y);
-
             this.game.physics.arcade.moveToPointer(projectile, 300);
+            //Détruit le projectile après 750 ms, optimisation
             this.game.time.events.add(750, function(){
                 projectile.kill();
             }, this)
         }
-
     },
     // =====================================
     // ==== UPDATE
@@ -266,6 +267,7 @@ DRAPEAU.Jeu.prototype = {
      * Fonction exécutée environ 60X / secondes
      */
     update: function () {
+        //Permet de s'assurer qu'il est possible de jouer.
         if (this.peutCommencer) {
             //Empêche le joueur de traverser les murs
             this.game.physics.arcade.collide(this.perso, this.couches.murs);
@@ -292,33 +294,49 @@ DRAPEAU.Jeu.prototype = {
             this.perso.body.velocity.y = 0;
             let sens = 1;
 
+            //Détection des touches 
             if (this.fleches.left.isDown) {
                 this.perso.scale.x = -1;
                 this.perso.animations.play('marcheCote', 30, true);
                 this.perso.body.velocity.x = -350;
+
+                //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.right.isDown) {
                 this.perso.scale.x = 1;
                 this.perso.animations.play('marcheCote', 30, true);
                 this.perso.body.velocity.x = 350;
+
+                 //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.up.isDown) {
                 this.perso.animations.play('marcheHaut', 30, true);
                 this.perso.body.velocity.y = -350;
+
+                 //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.down.isDown) {
                 this.perso.animations.play('marcheBas', 30, true);
                 this.perso.body.velocity.y = 350;
+
+                 //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else {
+                //Arrête l'animation lorsque les touches ne sont pas appuyées
                 this.perso.animations.stop();
             }
 
+            //FONCTION DE DÉVELOPPEMENT TESTE LA RÉSURRECTION  d'un joueur
             if (this.game.input.keyboard.isDown(Phaser.KeyCode.ONE)) {
                 this.revivre(JOUEUR.drapeauID);
             }
 
-
-        } //Fin if
+            if (this.game.input.keyboard.isDown(Phaser.KeyCode.TWO)) {
+                if(this.perso.possedeDrapeau == true){
+                   this.deposeDrapeau();
+                }
+            }
+            //console.log(this.perso.x, this.perso.y)
+        } //Fin if qui détecte le début de la partie
     } //Fin update
 }; // Fin Jeu.prototype
