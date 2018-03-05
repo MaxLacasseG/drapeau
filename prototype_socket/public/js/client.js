@@ -26,25 +26,34 @@ JOUEUR.socket.on('assignerDrapeauPos', function(drapeau){
 //Indique au serveur lorsque le joueur attrape un drapeau
 JOUEUR.attraperDrapeau = function(id, equipe){
     JOUEUR.socket.emit('attraperDrapeau', {id:id, equipe:equipe});
-}
+};
 
 //Retour du serveur
 JOUEUR.socket.on('drapeauEnDeplacement', function(id){
     console.log(id + " a le drapeau");
     JOUEUR.jeu.state.states.Jeu.drapeauEnDeplacement();
-})
+});
 
 //Indique au serveur lorsque le joueur attrape un drapeau
 JOUEUR.deposerDrapeau = function(id, posX, posY, equipe){
     JOUEUR.socket.emit('deposerDrapeau', {id:id, posX:posX, posY:posY, equipe:equipe});
-}
+};
 
 //Retour du serveur
 JOUEUR.socket.on('majDrapeau', function(data){
     console.log(data);
     console.log(data.id + " a déposé le drapeau");
     JOUEUR.jeu.state.states.Jeu.majPositionDrapeau(data);
-})
+});
+
+// GESTION DES PROJECTILES
+//=====================================================
+JOUEUR.tir = function(posX, posY, pointerX, pointerY,id){
+    JOUEUR.socket.emit('tirProjectile', {posX:posX, posY:posY, id:id, pointerX:pointerX, pointerY:pointerY});
+};
+JOUEUR.socket.on('syncProjectile', function(projectile){
+    JOUEUR.jeu.state.states.Jeu.syncProjectile(projectile);
+});
 
 //=====================================
 //Écouteurs de signaux du serveur

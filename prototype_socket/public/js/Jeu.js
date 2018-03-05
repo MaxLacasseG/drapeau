@@ -67,7 +67,7 @@ DRAPEAU.Jeu.prototype = {
         this.projectiles = this.game.add.group();
         this.projectiles.enableBody = true;
         this.projectiles.physicsBodyType = Phaser.Physics.ARCADE;
-        this.projectiles.createMultiple(15, 'projectile');
+        this.projectiles.createMultiple(50, 'projectile');
         this.projectiles.setAll('checkWorldBounds', true);
         this.projectiles.setAll('outOfBoundsKill', true);
 
@@ -221,44 +221,63 @@ DRAPEAU.Jeu.prototype = {
         this.signaux.dispatch(this.perso, this.game);
     },
     toucheBase: function (perso, fond) {
-        if (this.perso.drapeau == true) {
-        }
+        if (this.perso.drapeau == true) {}
         console.log("base");
     },
     prendDrapeau: function (perso, drapeau) {
-        if(!this.perso.possedeDrapeau){
+        if (!this.perso.possedeDrapeau) {
             this.perso.possedeDrapeau = true;
             JOUEUR.attraperDrapeau(perso.id, perso.equipe);
         }
     },
-    drapeauEnDeplacement(){
+    drapeauEnDeplacement() {
         console.log(this.drapeau.visible);
         this.drapeau.visible = false;
         this.drapeau.body.enable = false;
     },
-    deposeDrapeau(){
+    deposeDrapeau() {
         this.perso.possedeDrapeau = false;
         JOUEUR.deposerDrapeau(this.perso.id, this.perso.x, this.perso.y, this.perso.equipe);
     },
-    majPositionDrapeau(data){
+    majPositionDrapeau(data) {
         this.drapeau.x = data.posX;
         this.drapeau.y = data.posY;
         this.drapeau.visible = true;
-        this.game.time.events.add(100, function(){
+        this.game.time.events.add(100, function () {
             this.drapeau.body.enable = true;
         }, this);
     },
-    tirProjectile: function () {
-        if (this.game.time.now > this.prochainTir && this.projectiles.countDead() > 0) {      
+    tirProjectile: function (posX, posY) {
+        if (this.game.time.now > this.prochainTir && this.projectiles.countDead() > 0) {
             this.prochainTir = this.game.time.now + this.ratioTir;
-            var projectile = this.projectiles.getFirstDead();
+            let projectile = this.projectiles.getFirstDead();
             projectile.reset(this.perso.x, this.perso.y);
             this.game.physics.arcade.moveToPointer(projectile, 300);
+
+            let angle = this.game.math.angleBetween(this.perso.x, this.perso.y, posX, posY);
+            console.log("avant", this.input.activePointer.worldX, this.input.activePointer.worldY);
+
+            //let pointeur = this.game.input.pointer;
+            JOUEUR.tir(this.perso.x, this.perso.y, this.input.activePointer.worldX, this.input.activePointer.worldY, this.perso.id);
             //Détruit le projectile après 750 ms, optimisation
-            this.game.time.events.add(750, function(){
+            this.game.time.events.add(750, function () {
                 projectile.kill();
-            }, this)
+            }, this);
         }
+    },
+    syncProjectile: function (projectileInfo) {
+        let projectile = this.projectiles.getFirstDead();
+        projectile.reset(this.tabPerso[projectileInfo.id].x, this.tabPerso[projectileInfo.id].y);
+
+        let projectileAnim = this.game.add.tween(projectile).to({
+            x: projectileInfo.pointerX,
+            y: projectileInfo.pointerY
+        }, 750, Phaser.Easing.Linear.In, true);
+
+        projectileAnim.onComplete.add(function(target, tween){
+            target.destroy();
+        }, this);
+
     },
     // =====================================
     // ==== UPDATE
@@ -286,7 +305,7 @@ DRAPEAU.Jeu.prototype = {
 
             // Gestion du tir
             if (this.game.input.activePointer.isDown) {
-                this.tirProjectile();
+                this.tirProjectile(this.game.input.activePointer.x, this.game.input.activePointer.y);
             }
 
             //Gestion des déplacements du joueur
@@ -307,19 +326,19 @@ DRAPEAU.Jeu.prototype = {
                 this.perso.animations.play('marcheCote', 30, true);
                 this.perso.body.velocity.x = 350;
 
-                 //On transmet la nouvelle position au script du client
+                //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.up.isDown) {
                 this.perso.animations.play('marcheHaut', 30, true);
                 this.perso.body.velocity.y = -350;
 
-                 //On transmet la nouvelle position au script du client
+                //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else if (this.fleches.down.isDown) {
                 this.perso.animations.play('marcheBas', 30, true);
                 this.perso.body.velocity.y = 350;
 
-                 //On transmet la nouvelle position au script du client
+                //On transmet la nouvelle position au script du client
                 JOUEUR.majPosition(JOUEUR.drapeauID, this.perso.position.x, this.perso.position.y, this.perso.frame, this.perso.scale.x);
             } else {
                 //Arrête l'animation lorsque les touches ne sont pas appuyées
@@ -332,8 +351,8 @@ DRAPEAU.Jeu.prototype = {
             }
 
             if (this.game.input.keyboard.isDown(Phaser.KeyCode.TWO)) {
-                if(this.perso.possedeDrapeau == true){
-                   this.deposeDrapeau();
+                if (this.perso.possedeDrapeau == true) {
+                    this.deposeDrapeau();
                 }
             }
             //console.log(this.perso.x, this.perso.y)

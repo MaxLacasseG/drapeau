@@ -105,6 +105,12 @@ io.on('connection', function (socket) {
             io.emit('drapeauEnDeplacement', data);
         })
 
+         // GESTION Projectiles
+        //=================================
+        socket.on('tirProjectile', function(data){
+            socket.broadcast.emit('syncProjectile', data);
+        });
+
         //Gestion de la deconnection 
         socket.on('disconnect', function () {
             app.equipes[socket.joueur.equipe]--;
