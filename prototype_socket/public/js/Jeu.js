@@ -288,6 +288,14 @@ DRAPEAU.Jeu.prototype = {
 
             this.game.physics.arcade.collide(this.perso, this.drapeau, this.prendDrapeau, null, this);
 
+            //A FAIRE *************************
+            // Créer un groupe pour les personnages
+            // Créer un groupe pour les projectiles
+            // this.game.physics.arcade.overlap(projectilesEnnemis, tabEnnemis, detruirePersonnage, null, this);
+            // Vérifier si ce sont nos propres balles et éviter de mourir
+            // Sinon détruire et respawn le personnage
+            // Déposer le drapeau s'il le faut.
+
             //Vérifie si le joueur entre dans sa base.
             if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.couches.base) && !this.dansSaBase) {
                 this.dansSaBase = true;
