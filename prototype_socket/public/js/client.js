@@ -55,6 +55,12 @@ JOUEUR.socket.on('syncProjectile', function(projectile){
     JOUEUR.jeu.state.states.Jeu.syncProjectile(projectile);
 });
 
+// GESTION DES POINTS
+//=====================================================
+JOUEUR.demarrerPoints= function(){
+    JOUEUR.socket.emit('augmenterPoints');
+}
+
 //=====================================
 //Écouteurs de signaux du serveur
 //=====================================
@@ -81,3 +87,6 @@ JOUEUR.socket.on('deplacement', function(joueur){
     JOUEUR.jeu.state.states.Jeu.majPosition(joueur.id, joueur.x, joueur.y, joueur.frame, joueur.sens);
 });
 
+JOUEUR.socket.on('ajouterPoints', (points)=>{
+    console.log(points.points);
+});

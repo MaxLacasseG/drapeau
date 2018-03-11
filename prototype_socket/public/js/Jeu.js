@@ -20,6 +20,7 @@ DRAPEAU.Jeu = function () {
     var projectiles;
     var ratioTir;
     var prochainTir;
+    var points = false;
 
 };
 
@@ -40,6 +41,7 @@ DRAPEAU.Jeu.prototype = {
         };
         this.ratioTir = 200;
         this.prochainTir = 0;
+        this.points = false;
     },
     /**
      * Fonction de chargement des médias
@@ -356,6 +358,13 @@ DRAPEAU.Jeu.prototype = {
             if (this.game.input.keyboard.isDown(Phaser.KeyCode.TWO)) {
                 if (this.perso.possedeDrapeau == true) {
                     this.deposeDrapeau();
+                }
+            }
+
+            if (this.game.input.keyboard.isDown(Phaser.KeyCode.THREE)) {
+                if(this.points == false){
+                    this.points = true;
+                    JOUEUR.demarrerPoints();
                 }
             }
             //console.log(this.perso.x, this.perso.y)

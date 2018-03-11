@@ -4,6 +4,7 @@ const server = require('http').Server(app);
 const io = require('socket.io').listen(server);
 const bodyParser = require('body-parser');
 let temps;
+let compteur, points;
 //var cookieParser = require(); À implémenter
 app.set('port', (process.env.PORT || 8081));
 
@@ -111,6 +112,13 @@ io.on('connection', function (socket) {
             socket.broadcast.emit('syncProjectile', data);
         });
 
+         // GESTION points
+        //=================================
+        socket.on('augmenterPoints', function(){
+            demarrerCompteur();
+        });
+
+
         //Gestion de la deconnection 
         socket.on('disconnect', function () {
             app.equipes[socket.joueur.equipe]--;
@@ -135,6 +143,24 @@ function recupererJoueurs() {
     return tabJoueurs;
 }
 
+function demarrerCompteur(){
+    console.log('démarrage temps');
+    points = 0;
+    compteur = setInterval(()=>{
+        points++;
+        io.sockets.emit('ajouterPoints', {points : points})
+    },1000);
+    setTimeout(function(){
+        clearInterval(compteur);
+    }, 10500);
+}
+function arreterCompteur(){
+    console.log('arret')
+    clearInterval(compteur);
+}
+function reinitialiserCompteur(){
+    
+}
 function finJeu() {
 
 }
