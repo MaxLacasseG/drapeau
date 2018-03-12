@@ -312,7 +312,7 @@ DRAPEAU.Jeu.prototype = {
                 this.dansSaBase = true;
                 this.toucheBase();
             }
-            //Vérifie si le joueur sort de la base
+            //Vérifie si le joueur sort de sa base
             if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.perso.base) === null && this.dansSaBase) {
                 this.dansSaBase = false;
             };
