@@ -50,7 +50,7 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
-        this.game.load.image('drapeau', 'medias/img/gem-1.png');
+        this.game.load.image('drapeau', 'medias/img/drapeau.png');
         this.game.load.spritesheet('persoMarche', 'medias/img/persoSpritesheet.png', 32, 32);
         this.game.load.spritesheet('taupeMarche', 'medias/img/taupeSpritesheet.png', 32, 32);
         this.game.load.spritesheet('arbreMarche', 'medias/img/arbreSpritesheet.png', 32, 32);
