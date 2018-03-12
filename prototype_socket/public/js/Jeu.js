@@ -47,7 +47,7 @@ DRAPEAU.Jeu.prototype = {
      * Fonction de chargement des médias
      */
     preload: function () {
-        this.game.load.tilemap('carte', 'medias/carte/carte2.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('carte', 'medias/carte/carte3.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('environnement', 'medias/carte/tileset.png');
         this.game.load.image('perso', 'medias/img/hero-idle-side.png');
         this.game.load.image('drapeau', 'medias/img/drapeau.png');
@@ -129,6 +129,7 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso[id].equipe = equipe;
         this.tabPerso[id].nom = nom;
         this.tabPerso[id].id = id;
+        this.tabPerso[id].base = this.couches["base"+this.tabPerso[id].equipe];
         this.creerJoueur();
     },
     /**
@@ -197,12 +198,20 @@ DRAPEAU.Jeu.prototype = {
         this.map.addTilesetImage('environnement', 'environnement');
         this.couches = {
             "fond": this.map.createLayer("fond"),
+            "decor": this.map.createLayer("decor"),
+            "decor2": this.map.createLayer("decor2"),
             "murs": this.map.createLayer("murs"),
-            "base": this.map.createLayer("base")
+            "base1": this.map.createLayer("base1"),
+            "base2": this.map.createLayer("base2"),
+            "base3": this.map.createLayer("base3")
         }
         this.couches.fond.resizeWorld();
+        this.couches.decor.resizeWorld();
+        this.couches.decor2.resizeWorld();
         this.couches.murs.resizeWorld();
-        this.couches.base.resizeWorld();
+        this.couches.base1.resizeWorld();
+        this.couches.base2.resizeWorld();
+        this.couches.base3.resizeWorld();
 
         //Crée les collisions avec le jeu
         this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
@@ -271,7 +280,7 @@ DRAPEAU.Jeu.prototype = {
         let projectile = this.projectiles.getFirstDead();
         projectile.reset(this.tabPerso[projectileInfo.id].x, this.tabPerso[projectileInfo.id].y);
 
-        this.game.physics.arcade.moveToXY(projectile,projectileInfo.pointerX, projectileInfo.pointerY,300);
+        this.game.physics.arcade.moveToXY(projectile, projectileInfo.pointerX, projectileInfo.pointerY, 300);
         this.game.time.events.add(750, function () {
             projectile.kill();
         }, this);
@@ -299,12 +308,12 @@ DRAPEAU.Jeu.prototype = {
             // Déposer le drapeau s'il le faut.
 
             //Vérifie si le joueur entre dans sa base.
-            if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.couches.base) && !this.dansSaBase) {
+            if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.perso.base) && !this.dansSaBase) {
                 this.dansSaBase = true;
                 this.toucheBase();
             }
             //Vérifie si le joueur sort de la base
-            if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.couches.base) === null && this.dansSaBase) {
+            if (this.map.getTileWorldXY(this.perso.position.x, this.perso.position.y, this.map.tileWidth, this.map.tileHeight, this.perso.base) === null && this.dansSaBase) {
                 this.dansSaBase = false;
             };
 
@@ -362,7 +371,7 @@ DRAPEAU.Jeu.prototype = {
             }
 
             if (this.game.input.keyboard.isDown(Phaser.KeyCode.THREE)) {
-                if(this.points == false){
+                if (this.points == false) {
                     this.points = true;
                     JOUEUR.demarrerPoints();
                 }
