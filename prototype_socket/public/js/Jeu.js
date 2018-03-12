@@ -37,7 +37,17 @@ DRAPEAU.Jeu.prototype = {
             x: 0,
             y: 0,
             equipe: null,
-            joueur: null
+            joueur: null,
+            posBase1:{
+                x:800,
+                y:240
+            }, posBase2:{
+                x:75,
+                y:950
+            }, posBase3:{
+                x:1445,
+                y:1540
+            }
         };
         this.ratioTir = 200;
         this.prochainTir = 0;
@@ -221,6 +231,18 @@ DRAPEAU.Jeu.prototype = {
 
     assignerDrapeau: function (drapeau) {
         this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
+        this.drapeau.posBase1 = {
+            x:800,
+            y:240
+        }
+        this.drapeau.posBase2 = {
+            x:75,
+            y:950
+        }
+        this.drapeau.posBase3 = {
+            x:1445,
+            y:1540
+        }
         this.game.physics.arcade.enable(this.drapeau);
         this.drapeau.body.immovable = true;
     },
@@ -232,12 +254,15 @@ DRAPEAU.Jeu.prototype = {
         this.signaux.dispatch(this.perso, this.game);
     },
     toucheBase: function (perso, fond) {
-        if (this.perso.drapeau == true) {}
-        console.log("base");
+        if (this.perso.possedeDrapeau == true) {
+            this.deposeDrapeau(this.drapeau["posBase"+this.perso.equipe]);
+        }
+        
     },
     prendDrapeau: function (perso, drapeau) {
         if (!this.perso.possedeDrapeau) {
             this.perso.possedeDrapeau = true;
+            console.log(this.drapeau.posBase1);
             JOUEUR.attraperDrapeau(perso.id, perso.equipe);
         }
     },
@@ -246,13 +271,16 @@ DRAPEAU.Jeu.prototype = {
         this.drapeau.visible = false;
         this.drapeau.body.enable = false;
     },
-    deposeDrapeau() {
-        this.perso.possedeDrapeau = false;
-        JOUEUR.deposerDrapeau(this.perso.id, this.perso.x, this.perso.y, this.perso.equipe);
+    deposeDrapeau(position) {
+        JOUEUR.deposerDrapeau(this.perso.id, position, this.perso.equipe);
+        this.game.time.events.add(2000, function () {
+            this.perso.possedeDrapeau = false;
+        }, this);
     },
-    majPositionDrapeau(data) {
-        this.drapeau.x = data.posX;
-        this.drapeau.y = data.posY;
+    majPositionDrapeau(position) {
+        console.log("majDrapeau",position);
+        this.drapeau.x = position.x;
+        this.drapeau.y = position.y;
         this.drapeau.visible = true;
         this.game.time.events.add(100, function () {
             this.drapeau.body.enable = true;

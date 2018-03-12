@@ -35,15 +35,13 @@ JOUEUR.socket.on('drapeauEnDeplacement', function(id){
 });
 
 //Indique au serveur lorsque le joueur attrape un drapeau
-JOUEUR.deposerDrapeau = function(id, posX, posY, equipe){
-    JOUEUR.socket.emit('deposerDrapeau', {id:id, posX:posX, posY:posY, equipe:equipe});
+JOUEUR.deposerDrapeau = function(id, position, equipe){
+    JOUEUR.socket.emit('deposerDrapeau', {id:id, position:position, equipe:equipe});
 };
 
 //Retour du serveur
 JOUEUR.socket.on('majDrapeau', function(data){
-    console.log(data);
-    console.log(data.id + " a déposé le drapeau");
-    JOUEUR.jeu.state.states.Jeu.majPositionDrapeau(data);
+    JOUEUR.jeu.state.states.Jeu.majPositionDrapeau(data.position);
 });
 
 // GESTION DES PROJECTILES

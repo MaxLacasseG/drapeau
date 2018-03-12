@@ -102,8 +102,8 @@ io.on('connection', function (socket) {
         })
 
         socket.on('deposerDrapeau', function(data){
-            console.log('joueur '+ data.id +' a attrapé le drapeau. Il appartient à l\'equipe'+data.equipe);
-            io.emit('drapeauEnDeplacement', data);
+            console.log('joueur '+ data.id +' a déposé le drapeau. Il est dans la base de l\'equipe'+data.equipe);
+            io.emit('majDrapeau', data);
         })
 
          // GESTION Projectiles
