@@ -267,6 +267,7 @@ DRAPEAU.Jeu.prototype = {
     toucheBase: function (perso, fond) {
         if (this.perso.possedeDrapeau == true) {
             this.deposeDrapeau(this.drapeau["posBase"+this.perso.equipe]);
+            JOUEUR.demarrerPoints();
         }
         
     },

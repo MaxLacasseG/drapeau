@@ -49,9 +49,12 @@ server.listen(app.get('port'), function () {
   
     //Enregistre le nombre de personnes par équipe
     app.equipes = {
-        1:0,
-        2:0,
-        3:0
+        1:{membres:0,
+        points:4},
+        2:{membres:0,
+            points:5},
+        3:{membres:0,
+            points:6}
     };
 });
 
@@ -76,7 +79,7 @@ io.on('connection', function (socket) {
             },
 
         //On augmente le nombre de joueurs par équipe
-        app.equipes[data.equipe]++;    
+        app.equipes[data.equipe].membres++;    
         console.log("++ equipes:", app.equipes);  
       
         
@@ -115,13 +118,20 @@ io.on('connection', function (socket) {
          // GESTION points
         //=================================
         socket.on('augmenterPoints', function(){
-            demarrerCompteur();
+            app.equipes[socket.joueur.equipe].points++;
+            io.emit('majPoints', app.equipes);
+            //demarrerCompteur();
+        });
+
+        socket.on('getPoints', function(){
+            io.emit('majPoints', app.equipes);
+            //demarrerCompteur();
         });
 
 
         //Gestion de la deconnection 
         socket.on('disconnect', function () {
-            app.equipes[socket.joueur.equipe]--;
+            app.equipes[socket.joueur.equipe].membres--;
             console.log("deconnection:" + socket.joueur.id);
             console.log("-- equipes:", app.equipes);
             io.emit('enleverJoueur', socket.joueur.id);

@@ -10,6 +10,7 @@ JOUEUR.nouveauJoueur = function(){
     let nom = conteneur.dataset.nom;
     console.log('nouveauJoueur:', equipe, nom);
     JOUEUR.socket.emit('nouveauJoueur', {equipe:equipe, nom:nom});
+    JOUEUR.socket.emit('getPoints', {equipe:equipe, nom:nom});
 };
 
 //Indique au serveur un changement de position
@@ -58,6 +59,12 @@ JOUEUR.socket.on('syncProjectile', function(projectile){
 JOUEUR.demarrerPoints= function(){
     JOUEUR.socket.emit('augmenterPoints');
 }
+
+JOUEUR.socket.on('majPoints', function(data){
+    let equipe1 = document.querySelector('.pointageConteneur .pointEquipe1').innerText = data[1].points;
+    let equipe2 = document.querySelector('.pointageConteneur .pointEquipe2').innerText = data[2].points;
+    let equipe3 = document.querySelector('.pointageConteneur .pointEquipe3').innerText = data[3].points;
+});
 
 //=====================================
 //Écouteurs de signaux du serveur
