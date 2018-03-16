@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/lib/phaser.js"></script>
     <script src="/js/Drapeau.js"></script>
@@ -28,6 +29,7 @@
                 <p class="data equipe<%= data.equipe%>"><%= data.nom%></p>
                 <p class="soustitre">Équipe</p>
                 <p class="data equipe<%= data.equipe%>"><%= data.equipe%></p>
+                <p class="retour"><a href="/">Quitter</a></p>
             </div>
         </header>
         <div data-equipe='<%= data.equipe%>' data-nom='<%= data.nom%>' id="jeuConteneur"></div>

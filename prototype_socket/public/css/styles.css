@@ -1,16 +1,13 @@
-html,
 body {
   width: 100vw;
   height: 100vh;
   box-sizing: border-box;
   display: flex;
 }
-html .conteneurPrincJeu,
 body .conteneurPrincJeu {
   display: flex;
   padding: 2em;
 }
-html .conteneurPrincJeu header,
 body .conteneurPrincJeu header {
   flex: 1 1 10%;
   display: flex;
@@ -18,12 +15,10 @@ body .conteneurPrincJeu header {
   padding: 0.25em;
   margin-right: 3em;
 }
-html .conteneurPrincJeu header img,
 body .conteneurPrincJeu header img {
   width: 5vw;
   height: auto;
 }
-html .conteneurPrincJeu header h1,
 body .conteneurPrincJeu header h1 {
   font-variant: small-caps;
   color: sienna;
@@ -32,41 +27,82 @@ body .conteneurPrincJeu header h1 {
   font-size: 1.2em;
   margin-bottom: 2em;
 }
-html .conteneurPrincJeu header .entete,
+body .conteneurPrincJeu header a {
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: darkolivegreen;
+}
+body .conteneurPrincJeu header a:hover {
+  color: sienna;
+}
 body .conteneurPrincJeu header .entete {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
-html .conteneurPrincJeu header .entete p,
 body .conteneurPrincJeu header .entete p {
   font-family: 'Alegreya', sans-serif;
 }
-html .conteneurPrincJeu header .entete p.soustitre,
 body .conteneurPrincJeu header .entete p.soustitre {
   margin-top: 1em;
   color: #39481f;
   font-weight: 600;
 }
-html .conteneurPrincJeu header .entete p.data,
 body .conteneurPrincJeu header .entete p.data {
   font-size: 1.5em;
   font-weight: 400;
   letter-spacing: 0.1em;
   color: darkolivegreen;
 }
-html .conteneurPrinc,
+body .conteneurPrincJeu header .entete p.retour {
+  margin-top: 7em;
+}
+body .instructionsConteneur {
+  border: yellowgreen 1px solid;
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.7);
+  align-items: center;
+  justify-content: center;
+}
+body .instructionsConteneur .instructions {
+  border: yellowgreen 1px solid;
+  padding: 3em;
+  background-color: cornsilk;
+}
+body .instructionsConteneur .instructions h3 {
+  font-variant: small-caps;
+  color: sienna;
+  letter-spacing: 0.2em;
+  font-family: 'Alegreya', serif;
+  font-size: 3em;
+  margin-bottom: 1em;
+}
+body .instructionsConteneur .instructions p {
+  font-family: 'Alegreya', sans-serif;
+  font-size: 2em;
+  font-weight: 500;
+  color: darkolivegreen;
+  margin-bottom: 0.25em;
+}
+body .instructionsConteneur .instructions .emphase {
+  font-weight: 700;
+  color: darkslategrey;
+}
 body .conteneurPrinc {
   flex: 1 0 auto;
   padding: 5em;
   display: flex;
   flex-direction: column;
 }
-html .conteneurPrinc header,
 body .conteneurPrinc header {
   padding: 0.1em 0;
   flex: 1 1 5%;
 }
-html .conteneurPrinc header h1,
 body .conteneurPrinc header h1 {
   text-align: right;
   font-variant: small-caps;
@@ -75,38 +111,31 @@ body .conteneurPrinc header h1 {
   font-family: 'Alegreya', serif;
   font-size: 5em;
 }
-html .conteneurPrinc .formBloc,
 body .conteneurPrinc .formBloc {
   padding: 0.2em 0;
   flex: 1 1 auto;
   display: flex;
 }
-html .conteneurPrinc .formBloc > section,
 body .conteneurPrinc .formBloc > section {
   flex: 0 1 50%;
 }
-html .conteneurPrinc .formBloc > section.gc,
 body .conteneurPrinc .formBloc > section.gc {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-html .conteneurPrinc .formBloc > section.gc img,
 body .conteneurPrinc .formBloc > section.gc img {
   max-width: 50%;
 }
-html .conteneurPrinc .formBloc > section.dr,
 body .conteneurPrinc .formBloc > section.dr {
   display: flex;
   flex-direction: column;
 }
-html .conteneurPrinc .formBloc > section.dr form,
 body .conteneurPrinc .formBloc > section.dr form {
   flex: 1 1 70%;
   display: flex;
   flex-direction: column;
 }
-html .conteneurPrinc .formBloc > section.dr form label,
 body .conteneurPrinc .formBloc > section.dr form label {
   flex: 1 1 50%;
   font-family: 'Alegreya', sans-serif;
@@ -114,21 +143,18 @@ body .conteneurPrinc .formBloc > section.dr form label {
   font-weight: 500;
   color: darkolivegreen;
 }
-html .conteneurPrinc .formBloc > section.dr form .nomGroupe,
 body .conteneurPrinc .formBloc > section.dr form .nomGroupe {
   flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-html .conteneurPrinc .formBloc > section.dr form .nomGroupe label,
 body .conteneurPrinc .formBloc > section.dr form .nomGroupe label {
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-html .conteneurPrinc .formBloc > section.dr form .nomGroupe input,
 body .conteneurPrinc .formBloc > section.dr form .nomGroupe input {
   flex: 1 1 50%;
   background-color: darkolivegreen;
@@ -141,18 +167,15 @@ body .conteneurPrinc .formBloc > section.dr form .nomGroupe input {
   border-radius: 0.2em;
   box-shadow: darkslategrey 0 0 5px 2px inset;
 }
-html .conteneurPrinc .formBloc > section.dr form .nomGroupe input > *,
 body .conteneurPrinc .formBloc > section.dr form .nomGroupe input > * {
   border: none;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe {
   flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe p,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe p {
   text-align: center;
   font-family: 'Alegreya', sans-serif;
@@ -160,12 +183,10 @@ body .conteneurPrinc .formBloc > section.dr form .equipeGroupe p {
   font-weight: 500;
   color: darkolivegreen;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe {
   display: flex;
   padding: 1em;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div {
   padding: 0.3em;
   flex: 1 1 33%;
@@ -175,7 +196,6 @@ body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > di
   align-items: center;
   text-align: center;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label {
   transition: border 250ms, background-color 500ms;
   flex: 0 1 50%;
@@ -186,54 +206,44 @@ body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > di
   font-size: 2em;
   border: 2px solid darkolivegreen;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label:hover,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div label:hover {
   cursor: pointer;
   background-color: darkslategrey;
   border: 2px solid darkslategrey;
   color: cornsilk;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input {
   display: none;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input:checked + label,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div input:checked + label {
   background-color: darkolivegreen;
   color: cornsilk;
 }
-html .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div p,
 body .conteneurPrinc .formBloc > section.dr form .equipeGroupe .radioGroupe > div p {
   color: darkred;
   font-size: 1.5em;
   font-style: italic;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe {
   flex: 1 1 30%;
   display: flex;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe div,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe div {
   flex: 1 1 50%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p {
   background-color: darkslategrey;
   transition: background-color 500ms;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p:hover,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe div:nth-of-type(1) p:hover {
   background-color: #1c2f2f;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe div:hover,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe div:hover {
   cursor: pointer;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe div p,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe div p {
   background-color: darkolivegreen;
   padding: 1em 3em;
@@ -244,7 +254,6 @@ body .conteneurPrinc .formBloc > section.dr .btnGroupe div p {
   font-size: 1.2em;
   transition: background-color 500ms;
 }
-html .conteneurPrinc .formBloc > section.dr .btnGroupe div p:hover,
 body .conteneurPrinc .formBloc > section.dr .btnGroupe div p:hover {
   background-color: #39481f;
 }

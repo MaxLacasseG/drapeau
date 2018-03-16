@@ -8,11 +8,20 @@
     <link href="https://fonts.googleapis.com/css?family=Alegreya|Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
-
+    <script src="/js/Accueil.js"></script>
     <title>Jeu avec phaser</title>
 </head>
 
 <body>
+    <div class="instructionsConteneur">
+        <div class="instructions">
+            <h3>Drapeau</h3>
+            <p><span class="emphase">Objectif </span>| Trouver le drapeau et le ramener dans la zone jaune de la base de votre équipe</p>
+            <p><span class="emphase">Points </span>| L'équipe gagne 1 point par tranche de 10 sec dans la zone</p>
+            <p><span class="emphase">Contrôles </span>| Déplacements -> Flèches du clavier ou WASD</p>
+            <p><span class="emphase">Contrôles </span>| Tirs -> Clic gauche de la souris</p>
+        </div>
+    </div>
     <div class="conteneurPrinc">
         <header>
             <h1>Le drapeau</h1>
@@ -33,24 +42,30 @@
                             <div>
                                 <input type="radio" name="equipe" id="equipe1" value="1" required>
                                 <label for="equipe1">1</label>
-                                <p><%=nbJoueur[1]%></p>
+                                <p>
+                                    <%=nbJoueur[1]%>
+                                </p>
                             </div>
                             <div>
                                 <input type="radio" name="equipe" id="equipe2" value="2" required>
                                 <label for="equipe2">2</label>
-                                <p><%=nbJoueur[2]%></p>
+                                <p>
+                                    <%=nbJoueur[2]%>
+                                </p>
                             </div>
                             <div>
                                 <input type="radio" name="equipe" id="equipe3" value="3" required>
                                 <label for="equipe3">3</label>
-                                <p><%=nbJoueur[3]%></p>
+                                <p>
+                                    <%=nbJoueur[3]%>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </form>
                 <div class="btnGroupe">
-                    <div>
-                        <p class="instructions">Le jeu</p>
+                    <div class="instructions">
+                        <p>Le jeu</p>
                     </div>
                     <div>
                         <p class="demarrage">C'est parti</p>
@@ -61,9 +76,9 @@
         </div>
     </div>
     <script>
-        document.querySelector('.demarrage').addEventListener('click', ()=>{
+        document.querySelector('.demarrage').addEventListener('click', () => {
             document.querySelector('#formDemarrage').submit();
-        },false);
+        }, false);
     </script>
 </body>
 
