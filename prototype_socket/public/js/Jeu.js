@@ -21,6 +21,7 @@ DRAPEAU.Jeu = function () {
     var ratioTir;
     var prochainTir;
     var points = false;
+    var personnages;
 
 };
 
@@ -83,6 +84,10 @@ DRAPEAU.Jeu.prototype = {
         this.projectiles.setAll('checkWorldBounds', true);
         this.projectiles.setAll('outOfBoundsKill', true);
 
+        this.personnages = this.game.add.group();
+        this.personnages.enableBody =true;
+        this.projectiles.physicsBodyType = Phaser.Physics.ARCADE;
+
         //Ajout du personnage    
         //Message au serveur
 
@@ -110,6 +115,7 @@ DRAPEAU.Jeu.prototype = {
         switch (equipe) {
             case "1":
                 this.tabPerso[id] = this.game.add.sprite(x, y, "persoMarche");
+                this.personnages.add(this.tabPerso[id]);
                 this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3, 4, 5]);
                 this.tabPerso[id].animations.add('marcheBas', [6, 7, 8, 9, 10, 11]);
                 this.tabPerso[id].animations.add('marcheHaut', [12, 13, 14, 15, 16, 17]);
@@ -117,6 +123,7 @@ DRAPEAU.Jeu.prototype = {
                 break;
             case "2":
                 this.tabPerso[id] = this.game.add.sprite(x, y, "taupeMarche");
+                this.personnages.add(this.tabPerso[id]);
                 this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3]);
                 this.tabPerso[id].animations.add('marcheBas', [4, 5, 6, 7]);
                 this.tabPerso[id].animations.add('marcheHaut', [8, 9, 10, 11]);
@@ -124,6 +131,7 @@ DRAPEAU.Jeu.prototype = {
                 break;
             case "3":
                 this.tabPerso[id] = this.game.add.sprite(x, y, "arbreMarche");
+                this.personnages.add(this.tabPerso[id]);
                 this.tabPerso[id].animations.add('marcheCote', [0, 1, 2, 3]);
                 this.tabPerso[id].animations.add('marcheBas', [4, 5, 6, 7]);
                 this.tabPerso[id].animations.add('marcheHaut', [8, 9, 10, 11]);
@@ -132,7 +140,7 @@ DRAPEAU.Jeu.prototype = {
         }
 
         this.tabPerso[id].anchor.set(0.5);
-        this.game.physics.arcade.enable(this.tabPerso[id]);
+        //this.game.physics.arcade.enable(this.tabPerso[id]);
 
         this.tabPerso[id].body.collideWorldBounds = true;
 
@@ -140,6 +148,7 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso[id].nom = nom;
         this.tabPerso[id].id = id;
         this.tabPerso[id].base = this.couches["base"+this.tabPerso[id].equipe];
+        console.log(this.personnages);
         this.creerJoueur();
     },
     /**
@@ -199,6 +208,8 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso[id].y = Math.floor(Math.random() * 600) + 600;
         this.estMort = false;
         this.tabPerso[id].visible = true;
+        this.tabPerso[id].body.velocity.x = 0;
+        this.tabPerso[id].body.velocity.y = 0;
     },
     // =====================================
     // ==== GESTION DE LA CRÉATION DU JEU
@@ -294,7 +305,7 @@ DRAPEAU.Jeu.prototype = {
             this.game.physics.arcade.moveToPointer(projectile, 300);
 
             let angle = this.game.math.angleBetween(this.perso.x, this.perso.y, posX, posY);
-            console.log("avant", this.input.activePointer.worldX, this.input.activePointer.worldY);
+            //console.log("avant", this.input.activePointer.worldX, this.input.activePointer.worldY);
 
             //let pointeur = this.game.input.pointer;
             JOUEUR.tir(this.perso.x, this.perso.y, this.input.activePointer.worldX, this.input.activePointer.worldY, this.perso.id);
@@ -313,6 +324,12 @@ DRAPEAU.Jeu.prototype = {
             projectile.kill();
         }, this);
     },
+    contactProjectiles:function(perso, projectile){
+        console.log(perso.id + " est mort");
+        this.revivre(perso.id);
+        projectile.kill();
+
+    },
     // =====================================
     // ==== UPDATE
     // =====================================
@@ -326,6 +343,8 @@ DRAPEAU.Jeu.prototype = {
             this.game.physics.arcade.collide(this.perso, this.couches.murs);
 
             this.game.physics.arcade.collide(this.perso, this.drapeau, this.prendDrapeau, null, this);
+
+            this.game.physics.arcade.collide(this.personnages, this.projectiles, this.contactProjectiles, null, this);
 
             //A FAIRE *************************
             // Créer un groupe pour les personnages
