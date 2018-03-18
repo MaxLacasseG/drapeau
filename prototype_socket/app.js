@@ -9,7 +9,9 @@ let compteur, points;
 app.set('port', (process.env.PORT || 8081));
 
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.set('view engine', 'ejs');
 
 
@@ -17,7 +19,9 @@ app.set('view engine', 'ejs');
 //          ROUTES 
 // ============================
 app.get('/', function (req, res) {
-    res.render('index', {nbJoueur: app.equipes});
+    res.render('index', {
+        nbJoueur: app.equipes
+    });
 });
 
 // DÉMARRAGE DU JEU
@@ -34,27 +38,54 @@ app.post('/jeu', function (req, res) {
 // =========================
 // DÉMARRAGE DU SERVEUR
 //==========================
-server.listen(app.get('port'), function () { 
+server.listen(app.get('port'), function () {
     console.log('Listening on ' + server.address().port);
     const temps = process.hrtime();
     //Enregistre les infos du drapeau;
-    app.positionsDrapeau = [{x:165, y:70},{x:395, y:625},{x:1365, y:150},{x:1410, y:550},{x:850, y:1105},{x:460, y:1510},{x:505, y:1250}];
+    app.positionsDrapeau = [{
+        x: 165,
+        y: 70
+    }, {
+        x: 395,
+        y: 625
+    }, {
+        x: 1365,
+        y: 150
+    }, {
+        x: 1410,
+        y: 550
+    }, {
+        x: 850,
+        y: 1105
+    }, {
+        x: 460,
+        y: 1510
+    }, {
+        x: 505,
+        y: 1250
+    }];
     let positionInitiale = app.positionsDrapeau[Math.floor(Math.random() * app.positionsDrapeau.length)];
-    
+
     app.drapeau = {
         x: positionInitiale.x,
         y: positionInitiale.y,
         equipe: null,
     };
-  
+
     //Enregistre le nombre de personnes par équipe
     app.equipes = {
-        1:{membres:0,
-        points:4},
-        2:{membres:0,
-            points:5},
-        3:{membres:0,
-            points:6}
+        1: {
+            membres: 0,
+            points: 4
+        },
+        2: {
+            membres: 0,
+            points: 5
+        },
+        3: {
+            membres: 0,
+            points: 6
+        }
     };
 });
 
@@ -69,20 +100,23 @@ io.on('connection', function (socket) {
     socket.on('nouveauJoueur', function (data) {
         //On place le drapeau pour la première fois
         socket.emit('assignerDrapeauPos', app.drapeau);
-
         socket.joueur = {
                 id: app.idDernierJoueur++,
                 x: attribuerPosition(600, 600),
                 y: attribuerPosition(600, 600),
-                nom:data.nom,
-                equipe:data.equipe
+                nom: data.nom,
+                equipe: data.equipe
             },
 
-        //On augmente le nombre de joueurs par équipe
-        app.equipes[data.equipe].membres++;    
-        console.log("++ equipes:", app.equipes);  
-      
-        
+            io.emit('afficherMessage', {
+                auteur: socket.joueur.nom,
+                msg: " a rejoint la partie."
+            })
+            //On augmente le nombre de joueurs par équipe
+            app.equipes[data.equipe].membres++;
+        console.log("++ equipes:", app.equipes);
+
+
         socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
@@ -99,31 +133,41 @@ io.on('connection', function (socket) {
 
         // GESTION DRAPEAU
         //=================================
-        socket.on('attraperDrapeau', function(data){
-            console.log('joueur '+ data.id +' a attrapé le drapeau. Il appartient à l\'equipe'+data.equipe);
+        socket.on('attraperDrapeau', function (data) {
+            io.emit('afficherMessage', {
+                auteur: socket.joueur.nom,
+                msg: " s'est emparé du drapeau!"
+            });
             io.emit('drapeauEnDeplacement', data.id);
         })
 
-        socket.on('deposerDrapeau', function(data){
-            console.log('joueur '+ data.id +' a déposé le drapeau. Il est dans la base de l\'equipe'+data.equipe);
+        socket.on('deposerDrapeau', function (data) {
+            io.emit('afficherMessage', {
+                auteur: socket.joueur.nom,
+                msg: " a réussi à déposer le drapeau dans sa base!"
+            });
             io.emit('majDrapeau', data);
         })
 
-         // GESTION Projectiles
+        // GESTION Projectiles
         //=================================
-        socket.on('tirProjectile', function(data){
+        socket.on('tirProjectile', function (data) {
             socket.broadcast.emit('syncProjectile', data);
         });
 
-         // GESTION points
+        // GESTION points
         //=================================
-        socket.on('augmenterPoints', function(){
+        socket.on('augmenterPoints', function () {
             app.equipes[socket.joueur.equipe].points++;
             io.emit('majPoints', app.equipes);
+            io.emit('afficherMessage', {
+                auteur:"L'équipe " + socket.joueur.equipe,
+                msg: " a fait un point!"
+            });
             //demarrerCompteur();
         });
 
-        socket.on('getPoints', function(){
+        socket.on('getPoints', function () {
             io.emit('majPoints', app.equipes);
             //demarrerCompteur();
         });
@@ -134,6 +178,10 @@ io.on('connection', function (socket) {
             app.equipes[socket.joueur.equipe].membres--;
             console.log("deconnection:" + socket.joueur.id);
             console.log("-- equipes:", app.equipes);
+            io.emit('afficherMessage', {
+                auteur: socket.joueur.nom,
+                msg: " a quitté la partie."
+            });
             io.emit('enleverJoueur', socket.joueur.id);
         });
     });
@@ -153,24 +201,29 @@ function recupererJoueurs() {
     return tabJoueurs;
 }
 
-function demarrerCompteur(){
+function demarrerCompteur() {
     console.log('démarrage temps');
     points = 0;
-    compteur = setInterval(()=>{
+    compteur = setInterval(() => {
         points++;
-        io.sockets.emit('ajouterPoints', {points : points})
-    },1000);
-    setTimeout(function(){
+        io.sockets.emit('ajouterPoints', {
+            points: points
+        })
+    }, 1000);
+    setTimeout(function () {
         clearInterval(compteur);
     }, 10500);
 }
-function arreterCompteur(){
+
+function arreterCompteur() {
     console.log('arret')
     clearInterval(compteur);
 }
-function reinitialiserCompteur(){
-    
+
+function reinitialiserCompteur() {
+
 }
+
 function finJeu() {
 
 }

@@ -24,54 +24,74 @@ body {
                 font-size: 1.2em;
                 margin-bottom: 2em;
             }
-            & a{
+            & a {
                 font-size: 1em;
-                        font-weight: 400;
-                        letter-spacing: 0.1em;
-                        color: darkolivegreen;
-                        &:hover{
-                            color: sienna;
-                        }
+                font-weight: 400;
+                letter-spacing: 0.1em;
+                color: darkolivegreen;
+                &:hover {
+                    color: sienna;
+                }
             }
             & .entete {
                 display: flex;
                 flex-direction: column;
-               height: 100%;
+                height: 100%;
                 & p {
                     font-family: 'Alegreya', sans-serif;
-                   
-                    &.soustitre{
+                    &.soustitre {
                         margin-top: 1em;
                         color: darken(rgb(85, 107, 47), 10%);
                         font-weight: 600;
                     }
-                    &.data{
+                    &.data {
                         font-size: 1.5em;
                         font-weight: 400;
                         letter-spacing: 0.1em;
                         color: darkolivegreen;
                     }
-                    &.retour{
-                        margin-top:7em;
+                    &.retour {
+                        margin-top: 7em;
                     }
                 }
-
+            }
+        }
+        & .boiteMsg {
+            padding: 3em;
+            overflow: scroll;
+            & h3 {
+                font-variant: small-caps;
+                color: sienna;
+                letter-spacing: 0.2em;
+                font-family: 'Alegreya', serif;
+                font-size: 1.25em;
+                margin-bottom: 1em;
+            }
+            & .msg {
+                margin-bottom: 1em;
+                color: #999;
+                font-family: 'Alegreya', serif;
+                font-size: 0.9em;
+                display: flex;
+                flex-direction: column-reverse;
+                
+                & .auteur{
+                    color: darkolivegreen;
+                    text-transform: uppercase;
+                }
             }
         }
     }
-    & .instructionsConteneur{
-        border: yellowgreen 1px solid;
+    & .instructionsConteneur {
         display: none;
         position: fixed;
         width: 100vw;
         height: 100vh;
         z-index: 999;
-        background-color:rgba(0,0,0,0.7);
+        background-color: rgba(0, 0, 0, 0.7);
         align-items: center;
         justify-content: center;
-       
-        & .instructions{
-            border: yellowgreen 1px solid;
+        & .instructions {
             padding: 3em;
             background-color: cornsilk;
             & h3 {
@@ -82,14 +102,14 @@ body {
                 font-size: 3em;
                 margin-bottom: 1em;
             }
-            & p{
+            & p {
                 font-family: 'Alegreya', sans-serif;
                 font-size: 2em;
                 font-weight: 500;
                 color: darkolivegreen;
                 margin-bottom: 0.25em;
             }
-            & .emphase{
+            & .emphase {
                 font-weight: 700;
                 color: darkslategrey;
             }
@@ -198,11 +218,11 @@ body {
                                         height: 40px;
                                         margin-bottom: 0.5em;
                                         font-size: 2em;
-                                        border:2px solid darkolivegreen;
+                                        border: 2px solid darkolivegreen;
                                         &:hover {
                                             cursor: pointer;
                                             background-color: darkslategrey;
-                                            border:2px solid darkslategrey;
+                                            border: 2px solid darkslategrey;
                                             color: cornsilk;
                                         }
                                     }
@@ -213,7 +233,7 @@ body {
                                             color: cornsilk;
                                         }
                                     }
-                                    & p{
+                                    & p {
                                         color: darkred;
                                         font-size: 1.5em;
                                         font-style: italic;

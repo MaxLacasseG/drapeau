@@ -2,6 +2,13 @@
 /* jshint esversion: 6*/
 var JOUEUR = {};
 JOUEUR.socket = io.connect();
+let boiteMsg;
+let msgGabarit;
+
+window.addEventListener('load', function(){
+    boiteMsg = document.querySelector(".boiteMsg");
+    msgGabarit = boiteMsg.querySelector(".msg.gabarit");
+})
 
 //Requêtes envoyées au serveur
 JOUEUR.nouveauJoueur = function(){
@@ -18,6 +25,17 @@ JOUEUR.majPosition = function(id, posX, posY, frame, sens){
     JOUEUR.socket.emit('majPosition', {id:id, x:posX, y:posY, frame:frame, sens:sens});
 };
 
+JOUEUR.socket.on('afficherMessage', function(data){
+    let clone = msgGabarit.cloneNode(true);
+    let span = document.createElement('span');
+    span.classList.add('auteur');
+    span.innerText = data.auteur;
+    let text = document.createTextNode(data.msg);
+    clone.appendChild(span);
+    clone.appendChild(text);
+    boiteMsg.appendChild(clone);
+    boiteMsg.scrollTop = boiteMsg.scrollHeight;
+})
 
 // GESTION DU DRAPEAU
 //=====================================================

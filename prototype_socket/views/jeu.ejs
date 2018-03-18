@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c"
+        crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/lib/phaser.js"></script>
     <script src="/js/Drapeau.js"></script>
@@ -26,9 +27,13 @@
             <h1>Drapeau</h1>
             <div class="entete">
                 <p class="soustitre">Nom</p>
-                <p class="data equipe<%= data.equipe%>"><%= data.nom%></p>
+                <p class="data equipe<%= data.equipe%>">
+                    <%= data.nom%>
+                </p>
                 <p class="soustitre">Équipe</p>
-                <p class="data equipe<%= data.equipe%>"><%= data.equipe%></p>
+                <p class="data equipe<%= data.equipe%>">
+                    <%= data.equipe%>
+                </p>
                 <div class="pointageConteneur">
                     <h2>Pointage</h2>
                     <h3>Équipe 1</h3>
@@ -38,10 +43,53 @@
                     <h3>Équipe 3</h3>
                     <p class="pointEquipe3">0</p>
                 </div>
-                <p class="retour"><a href="/">Quitter</a></p>
+                <p class="retour">
+                    <a href="/">Quitter</a>
+                </p>
             </div>
         </header>
         <div data-equipe='<%= data.equipe%>' data-nom='<%= data.nom%>' id="jeuConteneur"></div>
+        <div class="boiteMsg">
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg">lorem</p>
+            <p class="msg gabarit">lorem</p>
+        </div>
     </div>
 </body>
 

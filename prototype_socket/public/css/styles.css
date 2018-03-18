@@ -58,8 +58,31 @@ body .conteneurPrincJeu header .entete p.data {
 body .conteneurPrincJeu header .entete p.retour {
   margin-top: 7em;
 }
+body .conteneurPrincJeu .boiteMsg {
+  padding: 3em;
+  overflow: scroll;
+}
+body .conteneurPrincJeu .boiteMsg h3 {
+  font-variant: small-caps;
+  color: sienna;
+  letter-spacing: 0.2em;
+  font-family: 'Alegreya', serif;
+  font-size: 1.25em;
+  margin-bottom: 1em;
+}
+body .conteneurPrincJeu .boiteMsg .msg {
+  margin-bottom: 1em;
+  color: #999;
+  font-family: 'Alegreya', serif;
+  font-size: 0.9em;
+  display: flex;
+  flex-direction: column-reverse;
+}
+body .conteneurPrincJeu .boiteMsg .msg .auteur {
+  color: darkolivegreen;
+  text-transform: uppercase;
+}
 body .instructionsConteneur {
-  border: yellowgreen 1px solid;
   display: none;
   position: fixed;
   width: 100vw;
@@ -70,7 +93,6 @@ body .instructionsConteneur {
   justify-content: center;
 }
 body .instructionsConteneur .instructions {
-  border: yellowgreen 1px solid;
   padding: 3em;
   background-color: cornsilk;
 }
