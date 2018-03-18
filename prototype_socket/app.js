@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 //=============================
 //          ROUTES 
 // ============================
+//Accueil
 app.get('/', function (req, res) {
     res.render('index', {
         nbJoueur: app.equipes
@@ -47,7 +48,7 @@ server.listen(app.get('port'), function () {
         y: 70
     }, {
         x: 395,
-        y: 625
+        y: 640
     }, {
         x: 1365,
         y: 150
@@ -64,27 +65,23 @@ server.listen(app.get('port'), function () {
         x: 505,
         y: 1250
     }];
-    let positionInitiale = app.positionsDrapeau[Math.floor(Math.random() * app.positionsDrapeau.length)];
+    app.drapeau = {};
+    posAleatoireDrapeau();
 
-    app.drapeau = {
-        x: positionInitiale.x,
-        y: positionInitiale.y,
-        equipe: null,
-    };
-
+    console.log(app.drapeau.posX, app.drapeau.posY);
     //Enregistre le nombre de personnes par équipe
     app.equipes = {
         1: {
             membres: 0,
-            points: 4
+            points: 0
         },
         2: {
             membres: 0,
-            points: 5
+            points: 0
         },
         3: {
             membres: 0,
-            points: 6
+            points: 0
         }
     };
 });
@@ -99,7 +96,7 @@ io.on('connection', function (socket) {
     //Gestion des nouveaux utilisateurs
     socket.on('nouveauJoueur', function (data) {
         //On place le drapeau pour la première fois
-        socket.emit('assignerDrapeauPos', app.drapeau);
+        socket.emit('placerDrapeau', app.drapeau);
         socket.joueur = {
                 id: app.idDernierJoueur++,
                 x: attribuerPosition(600, 600),
@@ -109,11 +106,11 @@ io.on('connection', function (socket) {
             },
 
             io.emit('afficherMessage', {
-                auteur: socket.joueur.nom,
+                auteur: socket.joueur.nom + " ",
                 msg: " a rejoint la partie."
             })
-            //On augmente le nombre de joueurs par équipe
-            app.equipes[data.equipe].membres++;
+        //On augmente le nombre de joueurs par équipe
+        app.equipes[data.equipe].membres++;
         console.log("++ equipes:", app.equipes);
 
 
@@ -133,21 +130,44 @@ io.on('connection', function (socket) {
 
         // GESTION DRAPEAU
         //=================================
-        socket.on('attraperDrapeau', function (data) {
+        socket.on('attraperDrapeau', function () {
             io.emit('afficherMessage', {
                 auteur: socket.joueur.nom,
-                msg: " s'est emparé du drapeau!"
+                msg: " s'est emparé(e) du drapeau!"
             });
-            io.emit('drapeauEnDeplacement', data.id);
+            socket.joueur.possedeDrapeau = true;
         })
 
-        socket.on('deposerDrapeau', function (data) {
+        socket.on('echapperDrapeau', function (data) {
+            io.emit('afficherMessage', {
+                auteur: socket.joueur.nom,
+                msg: " a échappé le drapeau!"
+            });
+        })
+
+        socket.on('deposerDrapeau', function () {
             io.emit('afficherMessage', {
                 auteur: socket.joueur.nom,
                 msg: " a réussi à déposer le drapeau dans sa base!"
             });
-            io.emit('majDrapeau', data);
-        })
+            socket.joueur.possedeDrapeau = false;
+        });
+
+        
+
+        socket.on('setDrapeau', function(data){
+            app.drapeau = {
+                posX: data.posX,
+                posY: data.posY,
+                visible:data.visible,
+                equipe: data.equipe,
+            };
+            io.emit('placerDrapeau', app.drapeau);
+        });
+
+        socket.on('getDrapeau', function(data){
+            socket.emit('placerDrapeau', app.drapeau);
+        });
 
         // GESTION Projectiles
         //=================================
@@ -161,7 +181,7 @@ io.on('connection', function (socket) {
             app.equipes[socket.joueur.equipe].points++;
             io.emit('majPoints', app.equipes);
             io.emit('afficherMessage', {
-                auteur:"L'équipe " + socket.joueur.equipe,
+                auteur: "L'équipe " + socket.joueur.equipe,
                 msg: " a fait un point!"
             });
             //demarrerCompteur();
@@ -175,9 +195,16 @@ io.on('connection', function (socket) {
 
         //Gestion de la deconnection 
         socket.on('disconnect', function () {
+            if(socket.joueur.possedeDrapeau){
+                app.drapeau.posX = socket.joueur.x;
+                app.drapeau.posY = socket.joueur.y;
+                app.drapeau.visible = true;
+                app.drapeau.equipe = null;
+                io.emit('placerDrapeau', app.drapeau);
+            }
             app.equipes[socket.joueur.equipe].membres--;
-            console.log("deconnection:" + socket.joueur.id);
-            console.log("-- equipes:", app.equipes);
+            //console.log("deconnection:" + socket.joueur.id);
+            //console.log("-- equipes:", app.equipes);
             io.emit('afficherMessage', {
                 auteur: socket.joueur.nom,
                 msg: " a quitté la partie."
@@ -199,6 +226,15 @@ function recupererJoueurs() {
         if (joueur) tabJoueurs.push(joueur);
     });
     return tabJoueurs;
+}
+
+function posAleatoireDrapeau() {
+    var position = app.positionsDrapeau[Math.floor((Math.random() * app.positionsDrapeau.length))];
+    app.drapeau.posX = position.x;
+    app.drapeau.posY = position.y;
+    app.drapeau.visible = true;
+    app.drapeau.equipe = null;
+    io.emit('placerDrapeau', app.drapeau);
 }
 
 function demarrerCompteur() {

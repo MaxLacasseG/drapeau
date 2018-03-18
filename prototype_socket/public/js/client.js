@@ -15,7 +15,6 @@ JOUEUR.nouveauJoueur = function(){
     let conteneur = document.querySelector('#jeuConteneur');
     let equipe = conteneur.dataset.equipe;
     let nom = conteneur.dataset.nom;
-    console.log('nouveauJoueur:', equipe, nom);
     JOUEUR.socket.emit('nouveauJoueur', {equipe:equipe, nom:nom});
     JOUEUR.socket.emit('getPoints', {equipe:equipe, nom:nom});
 };
@@ -33,36 +32,54 @@ JOUEUR.socket.on('afficherMessage', function(data){
     let text = document.createTextNode(data.msg);
     clone.appendChild(span);
     clone.appendChild(text);
+    clone.classList.remove('gabarit');
     boiteMsg.appendChild(clone);
     boiteMsg.scrollTop = boiteMsg.scrollHeight;
 })
 
 // GESTION DU DRAPEAU
 //=====================================================
-JOUEUR.socket.on('assignerDrapeauPos', function(drapeau){
-    JOUEUR.jeu.state.states.Jeu.assignerDrapeau(drapeau);
-});
-//Indique au serveur lorsque le joueur attrape un drapeau
-JOUEUR.attraperDrapeau = function(id, equipe){
-    JOUEUR.socket.emit('attraperDrapeau', {id:id, equipe:equipe});
-};
-
-//Retour du serveur
-JOUEUR.socket.on('drapeauEnDeplacement', function(id){
-    console.log(id + " a le drapeau");
-    JOUEUR.jeu.state.states.Jeu.drapeauEnDeplacement();
+JOUEUR.socket.on('placerDrapeau', function(drapeau){
+    JOUEUR.jeu.state.states.Jeu.placerDrapeau(drapeau);
 });
 
-//Indique au serveur lorsque le joueur attrape un drapeau
-JOUEUR.deposerDrapeau = function(id, position, equipe){
-    JOUEUR.socket.emit('deposerDrapeau', {id:id, position:position, equipe:equipe});
-};
 
-//Retour du serveur
-JOUEUR.socket.on('majDrapeau', function(data){
-    JOUEUR.jeu.state.states.Jeu.majPositionDrapeau(data.position);
-});
+JOUEUR.attraperDrapeau = function(position, visible, equipe){
+    let drapeau = {
+        posX: position.x,
+        posY: position.y,
+        visible:visible,
+        equipe: equipe,
+    }
+    JOUEUR.socket.emit('attraperDrapeau');
+    JOUEUR.socket.emit('setDrapeau', drapeau);
+}
 
+JOUEUR.echapperDrapeau = function(position, visible, equipe){
+    let drapeau = {
+        posX: position.x,
+        posY: position.y,
+        visible:visible,
+        equipe: equipe,
+    }
+    JOUEUR.socket.emit('echapperDrapeau');
+    JOUEUR.socket.emit('setDrapeau', drapeau);
+}
+
+JOUEUR.deposerDrapeau = function(position, visible, equipe){
+    let drapeau = {
+        posX: position.x,
+        posY: position.y,
+        visible:visible,
+        equipe: equipe,
+    }
+    JOUEUR.socket.emit('deposerDrapeau');
+    JOUEUR.socket.emit('setDrapeau', drapeau);
+}
+
+JOUEUR.recupererDrapeau = function(){
+    JOUEUR.socket.emit('getDrapeau');
+}
 // GESTION DES PROJECTILES
 //=====================================================
 JOUEUR.tir = function(posX, posY, pointerX, pointerY,id){

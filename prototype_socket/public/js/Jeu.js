@@ -39,15 +39,17 @@ DRAPEAU.Jeu.prototype = {
             y: 0,
             equipe: null,
             joueur: null,
-            posBase1:{
-                x:800,
-                y:240
-            }, posBase2:{
-                x:75,
-                y:950
-            }, posBase3:{
-                x:1445,
-                y:1540
+            posBase1: {
+                x: 800,
+                y: 240
+            },
+            posBase2: {
+                x: 75,
+                y: 950
+            },
+            posBase3: {
+                x: 1445,
+                y: 1540
             }
         };
         this.ratioTir = 200;
@@ -69,8 +71,8 @@ DRAPEAU.Jeu.prototype = {
         this.game.load.image('projectile', 'medias/img/gem-1.png');
     },
     create: function () {
-        this.signaux = new Phaser.Signal();
-        this.signaux.add(this.toucheBase, this);
+        //this.signaux = new Phaser.Signal();
+        //this.signaux.add(this.toucheBase, this);
 
         //Démarrage du système de physique
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -85,7 +87,7 @@ DRAPEAU.Jeu.prototype = {
         this.projectiles.setAll('outOfBoundsKill', true);
 
         this.personnages = this.game.add.group();
-        this.personnages.enableBody =true;
+        this.personnages.enableBody = true;
         this.projectiles.physicsBodyType = Phaser.Physics.ARCADE;
 
         //Ajout du personnage    
@@ -147,8 +149,7 @@ DRAPEAU.Jeu.prototype = {
         this.tabPerso[id].equipe = equipe;
         this.tabPerso[id].nom = nom;
         this.tabPerso[id].id = id;
-        this.tabPerso[id].base = this.couches["base"+this.tabPerso[id].equipe];
-        console.log(this.personnages);
+        this.tabPerso[id].base = this.couches["base" + this.tabPerso[id].equipe];
         this.creerJoueur();
     },
     /**
@@ -236,23 +237,25 @@ DRAPEAU.Jeu.prototype = {
 
         //Crée les collisions avec le jeu
         this.map.setCollisionBetween(1, 1028, true, this.couches.murs);
-
+        this.creerDrapeau();
+        JOUEUR.recupererDrapeau();
         //this.map.setCollision(195, true, this.couches.base);
     },
 
-    assignerDrapeau: function (drapeau) {
-        this.drapeau = this.game.add.sprite(drapeau.x, drapeau.y, "drapeau");
+    creerDrapeau: function () {
+        
+        this.drapeau = this.game.add.sprite(0, 0, "drapeau");
         this.drapeau.posBase1 = {
-            x:800,
-            y:240
+            x: 800,
+            y: 240
         }
         this.drapeau.posBase2 = {
-            x:75,
-            y:950
+            x: 75,
+            y: 950
         }
         this.drapeau.posBase3 = {
-            x:1445,
-            y:1540
+            x: 1445,
+            y: 1540
         }
         this.game.physics.arcade.enable(this.drapeau);
         this.drapeau.body.immovable = true;
@@ -261,42 +264,46 @@ DRAPEAU.Jeu.prototype = {
     // =====================================
     // ==== GESTION DES INTERACTIONS
     // =====================================
-    collisionAvecFond: function (perso, fond) {
-        this.signaux.dispatch(this.perso, this.game);
-    },
-    toucheBase: function (perso, fond) {
-        if (this.perso.possedeDrapeau == true) {
-            this.deposeDrapeau(this.drapeau["posBase"+this.perso.equipe]);
-            JOUEUR.demarrerPoints();
+    placerDrapeau: function (drapeau) {
+        this.drapeau.x = drapeau.posX;
+        this.drapeau.y = drapeau.posY;
+        this.drapeau.visible = drapeau.visible;
+        this.drapeau.equipe = drapeau.equipe;
+        if(!this.drapeau.visible){
+            this.drapeau.body.enable = false;
+        }else{
+            this.game.time.events.add(1000, function () {
+                this.drapeau.body.enable = true;
+            },this);
         }
-        
     },
-    prendDrapeau: function (perso, drapeau) {
+    attraperDrapeau: function (perso, drapeau) {
+        //Évite d'envoyer plusieurs fois le même signal
         if (!this.perso.possedeDrapeau) {
             this.perso.possedeDrapeau = true;
-            console.log(this.drapeau.posBase1);
-            JOUEUR.attraperDrapeau(perso.id, perso.equipe);
+            JOUEUR.attraperDrapeau({x:this.perso.x, y:this.perso.y}, false, this.perso.equipe);
         }
     },
-    drapeauEnDeplacement() {
-        console.log(this.drapeau.visible);
-        this.drapeau.visible = false;
-        this.drapeau.body.enable = false;
+   
+    toucheBase: function (perso, fond) {
+        if (this.perso.possedeDrapeau == true) {
+            this.deposerDrapeau();
+            JOUEUR.demarrerPoints();
+        }
     },
-    deposeDrapeau(position) {
-        JOUEUR.deposerDrapeau(this.perso.id, position, this.perso.equipe);
-        this.game.time.events.add(2000, function () {
+    deposerDrapeau: function () {
+        if (this.perso.possedeDrapeau) {
             this.perso.possedeDrapeau = false;
-        }, this);
+            let position = this.drapeau['posBase'+this.perso.equipe]
+            JOUEUR.deposerDrapeau(position, true, this.perso.equipe);
+        }
     },
-    majPositionDrapeau(position) {
-        console.log("majDrapeau",position);
-        this.drapeau.x = position.x;
-        this.drapeau.y = position.y;
-        this.drapeau.visible = true;
-        this.game.time.events.add(100, function () {
-            this.drapeau.body.enable = true;
-        }, this);
+    possedeLeDrapeau:function(){
+        if(this.perso.possedeDrapeau){
+            return true;
+        }else{
+            return false;
+        }
     },
     tirProjectile: function (posX, posY) {
         if (this.game.time.now > this.prochainTir && this.projectiles.countDead() > 0) {
@@ -325,7 +332,7 @@ DRAPEAU.Jeu.prototype = {
             projectile.kill();
         }, this);
     },
-    contactProjectiles:function(perso, projectile){
+    contactProjectiles: function (perso, projectile) {
         console.log(perso.id + " est mort");
         this.revivre(perso.id);
         projectile.kill();
@@ -343,7 +350,7 @@ DRAPEAU.Jeu.prototype = {
             //Empêche le joueur de traverser les murs
             this.game.physics.arcade.collide(this.perso, this.couches.murs);
 
-            this.game.physics.arcade.collide(this.perso, this.drapeau, this.prendDrapeau, null, this);
+            this.game.physics.arcade.collide(this.perso, this.drapeau, this.attraperDrapeau, null, this);
 
             this.game.physics.arcade.collide(this.personnages, this.projectiles, this.contactProjectiles, null, this);
 
