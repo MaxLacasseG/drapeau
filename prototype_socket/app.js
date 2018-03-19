@@ -68,7 +68,7 @@ server.listen(app.get('port'), function () {
     app.drapeau = {};
     posAleatoireDrapeau();
 
-    console.log(app.drapeau.posX, app.drapeau.posY);
+    //console.log(app.drapeau.posX, app.drapeau.posY);
     //Enregistre le nombre de personnes par équipe
     app.equipes = {
         1: {
@@ -112,7 +112,7 @@ io.on('connection', function (socket) {
             })
         //On augmente le nombre de joueurs par équipe
         app.equipes[data.equipe].membres++;
-        console.log("++ equipes:", app.equipes);
+        //console.log("++ equipes:", app.equipes);
 
         socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
@@ -137,7 +137,7 @@ io.on('connection', function (socket) {
             });
             socket.joueur.possedeDrapeau = true;
             let tabJoueurs = recupererJoueurs();
-            console.log(tabJoueurs)
+            //console.log(tabJoueurs)
         });
 
         socket.on('echapperDrapeau', function (data) {
@@ -181,7 +181,7 @@ io.on('connection', function (socket) {
             
             let tabJoueurs = recupererJoueurs();
             for(joueur of tabJoueurs){
-                console.log(tabJoueurs);
+                //console.log(tabJoueurs);
                 if(joueur.id == data.id){
                     io.emit('afficherMessage', {
                         auteur: socket.joueur.nom,
@@ -190,7 +190,7 @@ io.on('connection', function (socket) {
                     
                     
                     if(joueur.possedeDrapeau == true){
-                        console.log('ok');
+                        //console.log('ok');
                         
                         app.drapeau = {
                             posX: data.posX,
@@ -276,7 +276,7 @@ function posAleatoireDrapeau() {
 }
 
 function demarrerCompteur() {
-    console.log('démarrage temps');
+    //console.log('démarrage temps');
     points = 0;
     compteur = setInterval(() => {
         points++;
@@ -290,7 +290,7 @@ function demarrerCompteur() {
 }
 
 function arreterCompteur() {
-    console.log('arret')
+    //console.log('arret')
     clearInterval(compteur);
 }
 
