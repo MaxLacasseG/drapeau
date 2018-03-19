@@ -145,6 +145,7 @@ DRAPEAU.Jeu.prototype = {
         //this.game.physics.arcade.enable(this.tabPerso[id]);
 
         this.tabPerso[id].body.collideWorldBounds = true;
+        this.tabPerso[id].body.immovable = true;
 
         this.tabPerso[id].equipe = equipe;
         this.tabPerso[id].nom = nom;
@@ -188,12 +189,7 @@ DRAPEAU.Jeu.prototype = {
     },
     revivre: function (id) {
         if (!this.estMort) {
-            if (this.tabPerso[id].drapeau) {
-                this.deposerDrapeau();
-                this.drapeau.body.enable = true;
-            }
             this.estMort = true;
-            console.log("revivre", id);
             this.tabPerso[id].visible = false;
             let mortsprite = this.game.add.sprite(this.tabPerso[id].x, this.tabPerso[id].y, 'mort');
             let mortAnim = mortsprite.animations.add('mort');
@@ -203,14 +199,16 @@ DRAPEAU.Jeu.prototype = {
         }
     },
     finAnimMort: function (sprite, animation) {
-        let id = sprite.id;
-        sprite.destroy();
-        this.tabPerso[id].x = Math.floor(Math.random() * 600) + 600;
-        this.tabPerso[id].y = Math.floor(Math.random() * 600) + 600;
+       JOUEUR.eliminerJoueur(sprite.id, {x:this.tabPerso[sprite.id].x, y:this.tabPerso[sprite.id].y});
+       sprite.destroy();
+    },
+    replacerJoueur:function(data){
         this.estMort = false;
-        this.tabPerso[id].visible = true;
-        this.tabPerso[id].body.velocity.x = 0;
-        this.tabPerso[id].body.velocity.y = 0;
+        this.tabPerso[data.id].x = data.posX;
+        this.tabPerso[data.id].y = data.posY;
+        this.tabPerso[data.id].visible = true;
+        this.tabPerso[data.id].possedeDrapeau = false;
+        this.tabPerso[data.id].velocity = 0;
     },
     // =====================================
     // ==== GESTION DE LA CRÉATION DU JEU
@@ -272,7 +270,7 @@ DRAPEAU.Jeu.prototype = {
         if(!this.drapeau.visible){
             this.drapeau.body.enable = false;
         }else{
-            this.game.time.events.add(1000, function () {
+            this.game.time.events.add(500, function () {
                 this.drapeau.body.enable = true;
             },this);
         }

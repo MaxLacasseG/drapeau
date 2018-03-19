@@ -102,7 +102,8 @@ io.on('connection', function (socket) {
                 x: attribuerPosition(600, 600),
                 y: attribuerPosition(600, 600),
                 nom: data.nom,
-                equipe: data.equipe
+                equipe: data.equipe,
+                possedeDrapeau:false
             },
 
             io.emit('afficherMessage', {
@@ -113,11 +114,10 @@ io.on('connection', function (socket) {
         app.equipes[data.equipe].membres++;
         console.log("++ equipes:", app.equipes);
 
-
         socket.emit('assignerID', socket.joueur.id);
         socket.emit('recupererJoueurs', recupererJoueurs());
         socket.broadcast.emit('nouveauJoueur', socket.joueur);
-
+        
         //Si un joueur change la position en X
         socket.on('majPosition', function (data) {
             socket.joueur.x = data.x;
@@ -136,7 +136,9 @@ io.on('connection', function (socket) {
                 msg: " s'est emparé(e) du drapeau!"
             });
             socket.joueur.possedeDrapeau = true;
-        })
+            let tabJoueurs = recupererJoueurs();
+            console.log(tabJoueurs)
+        });
 
         socket.on('echapperDrapeau', function (data) {
             io.emit('afficherMessage', {
@@ -173,6 +175,37 @@ io.on('connection', function (socket) {
         //=================================
         socket.on('tirProjectile', function (data) {
             socket.broadcast.emit('syncProjectile', data);
+        });
+
+        socket.on('eliminerJoueur', function (data) {
+            
+            let tabJoueurs = recupererJoueurs();
+            for(joueur of tabJoueurs){
+                console.log(tabJoueurs);
+                if(joueur.id == data.id){
+                    io.emit('afficherMessage', {
+                        auteur: socket.joueur.nom,
+                        msg: " a éliminé " + joueur.nom
+                    });
+                    
+                    
+                    if(joueur.possedeDrapeau == true){
+                        console.log('ok');
+                        
+                        app.drapeau = {
+                            posX: data.posX,
+                            posY: data.posY,
+                            visible:true,
+                            equipe: null
+                        };
+                        io.emit('placerDrapeau', app.drapeau);
+                    }
+                };
+            }
+            
+            data.posX = attribuerPosition(600, 600);
+            data.posY = attribuerPosition(600, 600);
+            io.emit('replacerJoueur', data);
         });
 
         // GESTION points

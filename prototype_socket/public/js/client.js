@@ -55,16 +55,6 @@ JOUEUR.attraperDrapeau = function(position, visible, equipe){
     JOUEUR.socket.emit('setDrapeau', drapeau);
 }
 
-JOUEUR.echapperDrapeau = function(position, visible, equipe){
-    let drapeau = {
-        posX: position.x,
-        posY: position.y,
-        visible:visible,
-        equipe: equipe,
-    }
-    JOUEUR.socket.emit('echapperDrapeau');
-    JOUEUR.socket.emit('setDrapeau', drapeau);
-}
 
 JOUEUR.deposerDrapeau = function(position, visible, equipe){
     let drapeau = {
@@ -87,6 +77,18 @@ JOUEUR.tir = function(posX, posY, pointerX, pointerY,id){
 };
 JOUEUR.socket.on('syncProjectile', function(projectile){
     JOUEUR.jeu.state.states.Jeu.syncProjectile(projectile);
+});
+
+JOUEUR.eliminerJoueur = function (id, position){
+    let data={
+        id: id,
+        posX:position.x,
+        posY:position.y
+    }
+    JOUEUR.socket.emit('eliminerJoueur', data);
+};
+JOUEUR.socket.on('replacerJoueur', function(data){
+    JOUEUR.jeu.state.states.Jeu.replacerJoueur(data);
 });
 
 // GESTION DES POINTS
