@@ -218,6 +218,11 @@ io.on('connection', function (socket) {
                 msg: " a fait un point!"
             });
             //demarrerCompteur();
+            io.emit('afficherMessage', {
+                auteur: "",
+                msg: "Le drapeau est remis en jeu"
+            });
+            posAleatoireDrapeau();
         });
 
         socket.on('getPoints', function () {

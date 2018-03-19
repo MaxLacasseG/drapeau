@@ -77,7 +77,12 @@
     </div>
     <script>
         document.querySelector('.demarrage').addEventListener('click', () => {
-            document.querySelector('#formDemarrage').submit();
+            let nom = document.querySelector("input#nom");
+            let equipe = document.querySelector("input[type='radio'][name='equipe']:checked");
+            if(nom.value != undefined && equipe != undefined){
+                document.querySelector('#formDemarrage').submit();
+            } 
+           
         }, false);
     </script>
 </body>
